@@ -1,0 +1,42 @@
+name: Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - '[0-9]+.x'
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Lint, format, test and build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup pnpm 📦️
+        uses: pnpm/action-setup@v2
+
+      - name: Use Node LTS ✨
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install dependencies 📦️
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint 💅
+        run: pnpm lint
+
+      - name: Format 🔍
+        run: pnpm format:check
+
+      - name: Test 🧪
+        run: pnpm test --passWithNoTests
+
+      - name: Build 🔨
+        run: pnpm build
