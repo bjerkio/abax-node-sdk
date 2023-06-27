@@ -9,7 +9,7 @@ integrations with the ABAX API, but it is still in early development.
 - Uses [undici](https://github.com/nodejs/undici) (Faster requests 🚀)
 - Pure ESM
 
-The endpoints that are currently supported are:
+The endpoints currently supported are:
 
 - GET v1/vehicles
 - GET v1/trips
@@ -38,3 +38,8 @@ client.getVehicles().then(vehicles => {
   console.log(vehicles);
 });
 ```
+
+## Contributing
+
+We love contributions! Please read our [Contributing Guide](CONTRIBUTING.md) to
+learn how to contribute to this project.
