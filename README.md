@@ -1,3 +1,5 @@
+<img src=".github/logo.svg" alt="Abax Node SDK">
+
 # abax-node-sdk
 
 ## Installation
