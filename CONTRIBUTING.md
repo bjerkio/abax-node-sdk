@@ -2,11 +2,13 @@
 
 Thank you for investing your time in contributing to our project!
 
-Read our [Code of Conduct](./CODE_OF_CONDUCT.md) to keep our community
+Read our [Code of Conduct][cod] to keep our community
 approachable and respectable.
 
 In this guide you will get an overview of the contribution workflow from opening
 an issue, creating a PR, reviewing, and merging the PR.
+
+[cod]: https://github.com/bjerkio/.github/blob/main/CODE_OF_CONDUCT.md
 
 ## New contributor guide
 
