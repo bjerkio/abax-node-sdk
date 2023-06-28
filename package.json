@@ -6,6 +6,9 @@
   "author": "Bjerk AS <office@bjerk.io> (https://bjerk.io)",
   "type": "module",
   "main": "index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/main.ts",
