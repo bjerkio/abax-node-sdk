@@ -206,8 +206,6 @@ export class AbaxClient {
       .query(({ input: { page, page_size, date_from, date_to } }) => {
         const queryParams = new URLSearchParams();
 
-        // 2020-04-17T08:46:17+00:00
-        // 2022-11-30T13:46:36+02:00
         queryParams.append(
           'date_from',
           format(date_from, "yyyy-MM-dd'T'HH:mm:ssxxx"),
