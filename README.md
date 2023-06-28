@@ -22,9 +22,10 @@ possible.
 ## Authentication
 
 If you don't know how to authenticate with the Abax API, you should consult
-their documentation. This SDK provides methods that can be used for acquiring
-access tokens to the Abax API, but there are a number of steps that must be
-taken before then.
+[their documentation](https://developers.abax.cloud/getting-started#authentication-and-authorization-details).
+This SDK provides methods that can be used for acquiring access tokens to the
+Abax API, but there are a number of steps that must be taken before you are
+ready to use these methods.
 
 `authorizeWithAuthorizationCode` – this method presupposes that the
 authorization code is available. In order to get such a code, you must direct
