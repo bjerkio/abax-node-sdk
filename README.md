@@ -1,4 +1,4 @@
-<img src=".github/logo.svg" alt="Abax Node SDK">
+<img src="https://github.com/bjerkio/abax-node-sdk/raw/main/.github/logo.svg" alt="Abax Node SDK">
 
 ABAX API client built using Typescript for Node.js. This SDK is used by multiple
 integrations with the ABAX API, but it is still in early development.
