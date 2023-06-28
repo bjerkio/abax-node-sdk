@@ -15,6 +15,7 @@ The endpoints currently supported are:
 - GET v1/trips
 - GET v1/trips/odometerReadings
 - GET v1/trips/expense
+- GET v2/equipment/usage-log
 
 **Note**: We have yet to add any tests, but we will add them as soon as
 possible.
