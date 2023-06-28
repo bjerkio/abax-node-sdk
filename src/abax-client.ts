@@ -1,10 +1,20 @@
 import { format } from 'date-fns';
 import { TypicalHttpError, buildCall } from 'typical-fetch';
 import {
+  GetEquipmentInput,
+  GetEquipmentResponse,
+  equipmentSchema,
+} from './calls/get-equipment.js';
+import {
   type GetOdometerValuesOfTripsInput,
   type GetOdometerValuesOfTripsResponse,
   getOdometerValuesOfTripsResponseSchema,
 } from './calls/get-odometer-values.js';
+import {
+  ListEquipmentInput,
+  ListEquipmentResponse,
+  listEquipmentResponse,
+} from './calls/list-equipment.js';
 import {
   type ListTripExpensesInput,
   type listTripExpensesResponse,
@@ -137,6 +147,47 @@ export class AbaxClient {
       .build();
 
     return performRequest(() => call(input));
+  }
+  /** Gets equipment by ID. Required scopes: `abax_profile`, `open_api`, `open_api.equipment` */
+  getEquipment(input: GetEquipmentInput): Promise<GetEquipmentResponse> {
+    const call = this.buildCall()
+      .args<{ input: GetEquipmentInput }>()
+      .method('get')
+      .path(({ input: { id } }) => `/v2/equipment/${id}`)
+      .parseJson(withZod(equipmentSchema))
+      .build();
+
+    return performRequest(() => call({ input }));
+  }
+
+  /** Gets paged list of equipment. Required scopes: `abax_profile`, `open_api`, `open_api.equipment`.  */
+  listEquipment(
+    input: ListEquipmentInput = {},
+  ): Promise<ListEquipmentResponse> {
+    const call = this.buildCall()
+      .args<{ input: ListEquipmentInput }>()
+      .method('get')
+      .path('/v2/equipment/')
+      .query(({ input: { page, page_size, unit_types } }) => {
+        const queryParams = new URLSearchParams();
+
+        if (page) {
+          queryParams.append('page', String(page));
+        }
+        if (page_size) {
+          queryParams.append('page_size', String(page_size));
+        }
+
+        if (unit_types) {
+          queryParams.append('unit_types', String(unit_types));
+        }
+
+        return queryParams;
+      })
+      .parseJson(withZod(listEquipmentResponse))
+      .build();
+
+    return performRequest(() => call({ input }));
   }
 
   private list150TripExpenses(
