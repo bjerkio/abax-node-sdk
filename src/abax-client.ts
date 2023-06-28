@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 import { TypicalHttpError, buildCall } from 'typical-fetch';
 import {
-  GetEquipmentInput,
-  GetEquipmentResponse,
+  type GetEquipmentInput,
+  type GetEquipmentResponse,
   equipmentSchema,
 } from './calls/get-equipment.js';
 import {
@@ -11,8 +11,8 @@ import {
   getOdometerValuesOfTripsResponseSchema,
 } from './calls/get-odometer-values.js';
 import {
-  ListEquipmentInput,
-  ListEquipmentResponse,
+  type ListEquipmentInput,
+  type ListEquipmentResponse,
   listEquipmentResponse,
 } from './calls/list-equipment.js';
 import {
