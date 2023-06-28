@@ -11,6 +11,11 @@ import {
   getOdometerValuesOfTripsResponseSchema,
 } from './calls/get-odometer-values.js';
 import {
+  type ListEquipmentLogsInput,
+  type ListEquipmentLogsResponse,
+  listEquipmentLogsResponseSchema,
+} from './calls/list-equipment-logs.js';
+import {
   type ListEquipmentInput,
   type ListEquipmentResponse,
   listEquipmentResponse,
@@ -185,6 +190,42 @@ export class AbaxClient {
         return queryParams;
       })
       .parseJson(withZod(listEquipmentResponse))
+      .build();
+
+    return performRequest(() => call({ input }));
+  }
+
+  /** Get paged list of usage logs. Required scopes: `abax_profile`, `open_api`, `open_api.equipment` */
+  async listEquipmentLogs(
+    input: ListEquipmentLogsInput,
+  ): Promise<ListEquipmentLogsResponse> {
+    const call = this.buildCall()
+      .args<{ input: ListEquipmentLogsInput }>()
+      .method('get')
+      .path('/v2/equipment/usage-log')
+      .query(({ input: { page, page_size, date_from, date_to } }) => {
+        const queryParams = new URLSearchParams();
+
+        queryParams.append(
+          'date_from',
+          format(date_from, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+        );
+
+        queryParams.append(
+          'date_to',
+          format(date_to, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+        );
+
+        if (page) {
+          queryParams.append('page', String(page));
+        }
+        if (page_size) {
+          queryParams.append('page_size', String(page_size));
+        }
+
+        return queryParams;
+      })
+      .parseJson(withZod(listEquipmentLogsResponseSchema))
       .build();
 
     return performRequest(() => call({ input }));
