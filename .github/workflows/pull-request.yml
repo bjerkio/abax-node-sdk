@@ -29,7 +29,7 @@ jobs:
         run: pnpm format:check
 
       - name: Test 🧪
-        run: pnpm test --passWithNoTests
+        run: pnpm test -- --passWithNoTests
 
       - name: Build 🔨
         run: pnpm build
