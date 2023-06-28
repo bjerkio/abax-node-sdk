@@ -4,23 +4,23 @@ import { performRequest } from '../common/perform-request';
 import { withZod } from '../common/utils';
 import { authCodeResponseSchema } from './authorization-code';
 
-interface RefreshTokenInput {
+interface RefreshAccessTokenInput {
   refreshToken: string;
   clientId: string;
   clientSecret: string;
   authUrl: string;
 }
 
-type RefreshTokenResponse = z.infer<typeof authCodeResponseSchema>;
+type RefreshAccessTokenResponse = z.infer<typeof authCodeResponseSchema>;
 
 /** Obtain tokens from a refresh token.
  * Note: Refresh token can only be used once. When refreshing the access token next time, use the new refresh token returned on the last refresh.
  */
-export function refreshTokens(
-  input: RefreshTokenInput,
-): Promise<RefreshTokenResponse> {
+export function refreshAccessToken(
+  input: RefreshAccessTokenInput,
+): Promise<RefreshAccessTokenResponse> {
   const call = buildCall()
-    .args<{ input: RefreshTokenInput }>()
+    .args<{ input: RefreshAccessTokenInput }>()
     .path('/connect/token')
     .baseUrl(new URL(input.authUrl))
     .headers({
