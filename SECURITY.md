@@ -13,8 +13,8 @@ currently being supported with security updates.
 
 To report a vulnerability, please send us an email to opensource@bjerk.io.
 
-You can expect updates within 2-4 days, followed by continuous updates
-every two days until the issue is fixed.
+You can expect updates within 2-4 days, followed by continuous updates every two
+days until the issue is fixed.
 
-Do not report vulnerabilities in our public issue tracker; we want to
-fix vulnerabilities, not tell people about the potential ones.
+Do not report vulnerabilities in our public issue tracker; we want to fix
+vulnerabilities, not tell people about the potential ones.
