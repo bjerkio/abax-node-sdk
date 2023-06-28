@@ -22,6 +22,26 @@ The endpoints currently supported are:
 **Note**: We have yet to add any tests, but we will add them as soon as
 possible.
 
+## Installation
+
+```bash
+pnpm add abax-node-sdk
+```
+
+## Usage
+
+```typescript
+import { AbaxClient } from 'abax-node-sdk';
+
+const client = new AbaxClient({
+  apiKey: 'xxxxx',
+});
+
+client.getVehicles().then(vehicles => {
+  console.log(vehicles);
+});
+```
+
 ## Authentication
 
 If you don't know how to authenticate with the Abax API, you should consult
@@ -48,26 +68,6 @@ credentials can be created freely in the developer portal, but can only be
 granted access to an abax environment manually by Abax support. This method can
 then be used to fetch an access token without the active involvement of an end
 user.
-
-## Installation
-
-```bash
-pnpm add abax-node-sdk
-```
-
-## Usage
-
-```typescript
-import { AbaxClient } from 'abax-node-sdk';
-
-const client = new AbaxClient({
-  apiKey: 'xxxxx',
-});
-
-client.getVehicles().then(vehicles => {
-  console.log(vehicles);
-});
-```
 
 ## Contributing
 
