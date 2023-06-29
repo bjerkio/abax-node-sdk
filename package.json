@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "author": "Bjerk AS <office@bjerk.io> (https://bjerk.io)",
   "type": "module",
-  "main": "index.js",
+  "exports": "./dist/main.js",
   "files": [
     "dist"
   ],
