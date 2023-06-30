@@ -29,6 +29,7 @@
     "@tsconfig/node-lts": "^18.12.2",
     "@tsconfig/strictest": "^2.0.1",
     "@types/node": "^18",
+    "dotenv": "^16.3.1",
     "eslint": "^8.43.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.3",
