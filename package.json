@@ -14,7 +14,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "vitest run"
+    "test": "vitest **/*.test.ts",
+    "test:all": "vitest",
+    "test:e2e": "vitest **/*.spec.ts",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "date-fns": "^2.30.0",
