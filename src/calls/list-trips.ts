@@ -1,65 +1,70 @@
 import { z } from 'zod';
-import type { QueryEnvelope } from '../common/types.js';
+import { listResponseEnvelope } from '../common/response-types.js';
+import { camelize } from '../common/types.js';
 import { driverSchema, vehicleCommercialClassSchema } from './shared.js';
 
-export type ListTripsInput = QueryEnvelope<{
+export interface ListTripsInput {
   /** Defaults to 1 */
   page?: number;
 
   /** Defaults to 1500 */
-  page_size?: number;
+  pageSize?: number;
 
   /** The period cannot be longer than 3 months */
-  date_from: Date;
+  dateFrom: Date;
 
   /** The period cannot be longer than 3 months */
-  date_to: Date;
+  dateTo: Date;
 
-  vehicle_id?: string;
-}>;
+  vehicleId?: string;
+}
 
-const locationPointSchema = z.object({
-  latitude: z.number(),
-  longitude: z.number(),
-  timestamp: z.string(),
-  signal_source: z.any(),
-  accuracy_radius: z.number().optional(),
-});
+const locationPointSchema = z
+  .object({
+    latitude: z.number(),
+    longitude: z.number(),
+    timestamp: z.string(),
+    signal_source: z.any(),
+    accuracy_radius: z.number().optional(),
+  })
+  .transform(camelize);
 
 const tripPointSchema = z.object({
   location: locationPointSchema,
   address: z.string().optional(),
 });
 
-const tripSchema = z.object({
-  id: z.string(),
-  vehicle: z.object({
+const tripVehicleSchema = z
+  .object({
     id: z.string(),
     alias: z.string().optional(),
     commercial_class: vehicleCommercialClassSchema,
-  }),
-  driver: driverSchema.optional(),
-  start: tripPointSchema,
-  finish: tripPointSchema,
-  distance: z.number().optional(),
-  purpose: z.string().optional(),
-  commercial_class: z.enum([
-    'Unknown',
-    'PrivateTrip',
-    'BusinessTrip',
-    'Commute',
-  ]),
-  notes: z.string().optional(),
-  duration: z.number().optional(),
-  source: z.enum(['Automatic', 'Manual']),
-});
+  })
+  .transform(camelize);
+
+const tripSchema = z
+  .object({
+    id: z.string(),
+    vehicle: tripVehicleSchema,
+    driver: driverSchema.optional(),
+    start: tripPointSchema,
+    finish: tripPointSchema,
+    distance: z.number().optional(),
+    purpose: z.string().optional(),
+    commercial_class: z.enum([
+      'Unknown',
+      'PrivateTrip',
+      'BusinessTrip',
+      'Commute',
+    ]),
+    notes: z.string().optional(),
+    duration: z.number().optional(),
+    source: z.enum(['Automatic', 'Manual']),
+  })
+  .transform(camelize);
 
 export type Trip = z.infer<typeof tripSchema>;
 
-export const listTripsResponseSchema = z.object({
-  page: z.number(),
-  page_size: z.number(),
-  items: z.array(tripSchema),
-});
+export const listTripsResponseSchema = listResponseEnvelope(tripSchema);
 
 export type ListTripsResponse = z.infer<typeof listTripsResponseSchema>;
