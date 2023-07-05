@@ -51,7 +51,7 @@ export const getTokenCall = buildCall()
   .parseJson(withZod(authCodeResponseSchema))
   .build();
 
-interface RefreshAccessTokenInput {
+export interface RefreshAccessTokenInput {
   refreshToken: string;
   clientId: string;
   clientSecret: string;
