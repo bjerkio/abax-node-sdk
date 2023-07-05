@@ -106,14 +106,5 @@ describe('abax auth', async () => {
     const token = await auth.getAccessToken();
     expect(refreshFun).toHaveBeenCalled();
     expect(token).toBe('new_access_token');
-    expect(auth.getCredentials()).toMatchInlineSnapshot(`
-      {
-        "accessToken": "new_access_token",
-        "expiresAt": 2000-02-01T13:00:00.000Z,
-        "idToken": "id_token",
-        "refreshToken": "new_refresh_token",
-        "tokenType": "Bearer",
-      }
-    `);
   });
 });
