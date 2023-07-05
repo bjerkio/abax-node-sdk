@@ -11,7 +11,7 @@ export class AbaxRefreshTokenError extends Error {
 }
 
 export interface AbaxCredentials {
-  idToken: string;
+  idToken?: string | undefined;
   accessToken: string;
   expiresAt: Date;
   tokenType: 'Bearer';

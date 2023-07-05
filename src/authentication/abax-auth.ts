@@ -55,7 +55,7 @@ export type AbaxAuthConfig = {
 
 export class AbaxAuth {
   private baseUrl = 'https://identity.abax.cloud';
-  private token?: AbaxCredentials;
+  private credentials?: AbaxCredentials;
 
   constructor(private readonly config: AbaxAuthConfig) {
     if (config.baseUrl) {
@@ -160,14 +160,14 @@ export class AbaxAuth {
    * @returns abax credentials
    */
   async refreshCredentials(): Promise<AbaxCredentials> {
-    if (!this.token?.refreshToken) {
+    if (!this.credentials?.refreshToken) {
       throw new Error('No refresh token available');
     }
 
     const result = await refreshCall({
       baseUrl: this.baseUrl,
       input: {
-        refreshToken: this.token.refreshToken,
+        refreshToken: this.credentials.refreshToken,
         clientId: this.config.clientId,
         clientSecret: this.config.clientSecret,
       },
@@ -189,8 +189,12 @@ export class AbaxAuth {
     return credentials;
   }
 
-  setCredentials(token: AbaxCredentials): void {
-    this.token = token;
+  setCredentials(credentials: AbaxCredentials): void {
+    this.credentials = credentials;
+  }
+
+  getCredentials(): AbaxCredentials | undefined {
+    return this.credentials;
   }
 
   /**
@@ -199,18 +203,18 @@ export class AbaxAuth {
    * Refreshes the token if it is expired.
    */
   async getAccessToken(): Promise<string | undefined> {
-    if (!this.token) {
+    if (!this.credentials) {
       return undefined;
     }
 
     // check if token is expired
     if (
-      this.token.refreshToken &&
-      this.token.expiresAt.getTime() < Date.now()
+      this.credentials.refreshToken &&
+      this.credentials.expiresAt.getTime() < Date.now()
     ) {
       await this.refreshCredentials();
     }
 
-    return this.token.accessToken;
+    return this.credentials.accessToken;
   }
 }

@@ -11,7 +11,7 @@ export interface AuthorizationCodeInput {
 
 export const authCodeResponseSchema = z
   .object({
-    id_token: z.string(),
+    id_token: z.string().optional(),
     access_token: z.string(),
     expires_in: z.number(),
     token_type: z.literal('Bearer'),
