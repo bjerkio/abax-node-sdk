@@ -1,6 +1,6 @@
 {
   "name": "abax-node-sdk",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "SDK for Abax API",
   "license": "Apache-2.0",
   "author": "Bjerk AS <office@bjerk.io> (https://bjerk.io)",
