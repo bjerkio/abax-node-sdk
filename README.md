@@ -100,7 +100,7 @@ await auth.getCredentialsFromCode(authorizationCode);
  * This will automatically refresh the access token when it expires.
  */
 const client = new AbaxClient({
-  accessToken: () => auth.getAccessToken(),
+  apiKey: () => auth.getAccessToken(),
 });
 ```
 
@@ -121,7 +121,7 @@ await auth.getCredentialsFromClientCredentials();
  * This will automatically refresh the access token when it expires.
  */
 const client = new AbaxClient({
-  accessToken: () => auth.getAccessToken(),
+  apiKey: () => auth.getAccessToken(),
 });
 ```
 
@@ -165,7 +165,7 @@ auth.setCredentials(credentialsFromDatabase);
  * This will automatically refresh the access token when it expires.
  */
 const client = new AbaxClient({
-  accessToken: () => auth.getAccessToken(),
+  apiKey: () => auth.getAccessToken(),
 });
 ```
 
