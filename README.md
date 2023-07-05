@@ -51,7 +51,7 @@ which helps you solve the authentication part.
 [abax-auth-docs]:
   https://developers.abax.cloud/getting-started#authentication-and-authorization-details
 
-## When using Authorization Code Flow
+### When using Authorization Code Flow
 
 The first step is to create an instance of `AbaxAuth` and pass in your
 `clientId` and `clientSecret`. You can then use the `getAuthorizationUrl` method
@@ -86,23 +86,28 @@ const auth = new AbaxAuth({
   redirectUri: 'https://example.com/auth/callback',
 });
 
+/**
+ * Typically you get this code from the query parameters in the redirect URI.
+ * e.g. https://example.com/auth/callback?code=xxxxx
+ */
 const authorizationCode = 'xxxxx';
 
-// The function below will request the credentials from the Abax Identity API,
-// and store them in memory (it also returns the credentials, if you need them, eg. for storing in database).
+/**
+ * The function below will request the credentials from the Abax Identity API,
+ * and store them in memory (it also returns the credentials, if you need them, eg. for storing in database).
+ */
 await auth.getCredentialsFromCode(authorizationCode);
 
 /**
  * You can pass auth.getAccessToken() to the AbaxClient constructor.
  * This will automatically refresh the access token when it expires.
  */
-
 const client = new AbaxClient({
   accessToken: () => auth.getAccessToken(),
 });
 ```
 
-## When using Client Credentials Flow
+### When using Client Credentials Flow
 
 ```typescript
 import { AbaxAuth } from 'abax-node-sdk';
@@ -118,13 +123,12 @@ await auth.getCredentialsFromClientCredentials();
  * You can pass auth.getAccessToken() to the AbaxClient constructor.
  * This will automatically refresh the access token when it expires.
  */
-
 const client = new AbaxClient({
   accessToken: () => auth.getAccessToken(),
 });
 ```
 
-## Saving and loading credentials
+### Saving and loading credentials
 
 If you want to save the credentials to a database, you can use the
 `getCredentials` method on `AbaxAuth`. This will return the credentials as an
@@ -157,7 +161,7 @@ const auth = new AbaxAuth({
 });
 
 // Load credentials from database
-auth.setCredentials(credentials);
+auth.setCredentials(credentialsFromDatabase);
 
 /**
  * You can pass auth.getAccessToken() to the AbaxClient constructor.
@@ -167,6 +171,30 @@ const client = new AbaxClient({
   accessToken: () => auth.getAccessToken(),
 });
 ```
+
+### Setting scopes and automatic refreshing
+
+You can set the scopes you want to request when authenticating with the Abax
+Identity API. You can do this by passing the `scopes` option to `AbaxAuth`.
+
+```typescript
+import { AbaxAuth } from 'abax-node-sdk';
+
+const auth = new AbaxAuth({
+  clientId: 'xxxxx',
+  clientSecret: 'xxxxx',
+  scopes: ['vehicles:read', 'trips:read'],
+});
+```
+
+**Note**: Automatic refreshing of the access token is only supported when using
+the `offline_access` scope. As far as we know, this does not give access for
+longer than 30 days, so you will have to re-authenticate after 30 days.
+
+See the scopes available in the [Abax Identity API documentation on
+scopes][abax-scopes].
+
+[abax-scopes]: https://developers.abax.cloud/getting-started#scopes
 
 ## Contributing
 
