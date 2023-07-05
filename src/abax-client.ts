@@ -58,8 +58,8 @@ export interface AbaxClientConfig {
 }
 
 const apiUrls = {
-  sandbox: 'https://api-test.abax.cloud/v1',
-  production: 'https://api.abax.cloud/v1',
+  sandbox: 'https://api-test.abax.cloud',
+  production: 'https://api.abax.cloud',
 };
 
 export class AbaxClient {
