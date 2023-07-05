@@ -61,7 +61,7 @@ describe('abax auth', async () => {
     expect(credentials).toMatchInlineSnapshot(`
       {
         "accessToken": "access_token",
-        "expiresAt": 2000-02-01T13:00:00.000Z,
+        "expiresAt": 2000-02-01T14:00:00.000Z,
         "idToken": "id_token",
         "refreshToken": "refresh_token",
         "tokenType": "Bearer",
