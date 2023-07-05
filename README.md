@@ -48,6 +48,9 @@ If you don't know how to authenticate with the Abax API, you should consult
 [their documentation][abax-auth-docs]. This SDK comes packed with `AbaxAuth`
 which helps you solve the authentication part.
 
+[abax-auth-docs]:
+  https://developers.abax.cloud/getting-started#authentication-and-authorization-details
+
 ## When using Authorization Code Flow
 
 The first step is to create an instance of `AbaxAuth` and pass in your
@@ -84,6 +87,9 @@ const auth = new AbaxAuth({
 });
 
 const authorizationCode = 'xxxxx';
+
+// The function below will request the credentials from the Abax Identity API,
+// and store them in memory (it also returns the credentials, if you need them, eg. for storing in database).
 await auth.getCredentialsFromCode(authorizationCode);
 
 /**
@@ -118,8 +124,49 @@ const client = new AbaxClient({
 });
 ```
 
-[abax-auth-docs]:
-  https://developers.abax.cloud/getting-started#authentication-and-authorization-details
+## Saving and loading credentials
+
+If you want to save the credentials to a database, you can use the
+`getCredentials` method on `AbaxAuth`. This will return the credentials as an
+object, which you can then store in your database. Alternatively does both
+`getCredentialsFromCode` and `getCredentialsFromClientCredentials` return the
+credentials, so you can also store them from there.
+
+```typescript
+import { AbaxAuth } from 'abax-node-sdk';
+
+const auth = new AbaxAuth({
+  clientId: 'xxxxx',
+  clientSecret: 'xxxxx',
+});
+
+const credentials = await auth.getCredentialsFromCode(authorizationCode);
+
+// Store credentials in database
+```
+
+When you want to load the credentials from the database, you can use the
+`setCredentials` method on `AbaxAuth`. This will set the credentials on the
+
+```typescript
+import { AbaxAuth } from 'abax-node-sdk';
+
+const auth = new AbaxAuth({
+  clientId: 'xxxxx',
+  clientSecret: 'xxxxx',
+});
+
+// Load credentials from database
+auth.setCredentials(credentials);
+
+/**
+ * You can pass auth.getAccessToken() to the AbaxClient constructor.
+ * This will automatically refresh the access token when it expires.
+ */
+const client = new AbaxClient({
+  accessToken: () => auth.getAccessToken(),
+});
+```
 
 ## Contributing
 
