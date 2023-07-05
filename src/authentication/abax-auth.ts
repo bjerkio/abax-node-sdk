@@ -5,7 +5,7 @@ import {
   AbaxRefreshTokenError,
 } from './types';
 
-export type AbaxScopes =
+export type AbaxScope =
   | 'openid' // request the JWT id_token
   | 'abax_profile' //  request the id_token to include information about the user (name, email and organization id among others)
   | 'open_api' // Request access to the production ABAX Open API
@@ -43,7 +43,7 @@ export type AbaxAuthConfig = {
   /**
    * The scopes to request.
    */
-  scope?: AbaxScopes[] | undefined;
+  scope?: AbaxScope[] | undefined;
 
   /**
    * The base URL of the Abax Identity API.
