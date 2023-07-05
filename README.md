@@ -183,7 +183,7 @@ import { AbaxAuth } from 'abax-node-sdk';
 const auth = new AbaxAuth({
   clientId: 'xxxxx',
   clientSecret: 'xxxxx',
-  scopes: ['vehicles:read', 'trips:read'],
+  scopes: ['open_api', 'open_api.equipment'],
 });
 ```
 
