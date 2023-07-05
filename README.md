@@ -19,9 +19,6 @@ The endpoints currently supported are:
 - GET v2/equipment/{id}
 - GET v2/equipment/usage-log
 
-**Note**: We have yet to add any tests, but we will add them as soon as
-possible.
-
 ## Installation
 
 ```bash
