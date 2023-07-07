@@ -49,7 +49,7 @@
     "ignorePatterns": "dist/"
   },
   "exports": "./dist/main.js",
-  "packageManager": "pnpm@8.6.5",
+  "packageManager": "pnpm@8.6.6",
   "prettier": "@simenandre/prettier",
   "volta": {
     "node": "18.16.1"
