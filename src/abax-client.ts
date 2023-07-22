@@ -76,37 +76,37 @@ export class AbaxClient {
     input: ListVehiclesInput = { query: undefined },
   ): Promise<ListVehiclesResponse> {
     const call = this.buildCall()
-      .args<ListVehiclesInput>()
+      .args<{ input: ListVehiclesInput }>()
       .method('get')
       .path('v1/vehicles')
-      .query(input => makeQuery(input))
+      .query(({ input }) => makeQuery(input))
       .parseJson(withZod(listVehiclesResponseSchema))
       .build();
 
-    return this.performRequest(apiKey => call({ ...input, apiKey }));
+    return this.performRequest(apiKey => call({ input, apiKey }));
   }
 
   /** Gets paged list of Trips. Required scopes: `abax_profile`, `open_api`, `open_api.trips`.  */
   listTrips(input: ListTripsInput): Promise<ListTripsResponse> {
     const call = this.buildCall()
-      .args<ListTripsInput>()
+      .args<{ input: ListTripsInput }>()
       .method('get')
       .path('v1/trips')
-      .query(({ query }) =>
+      .query(({ input }) =>
         makeQuery({
           query: {
-            page: query.page,
-            page_size: query.page_size,
-            date_from: format(query.date_from, 'yyyy-MM-dd'),
-            date_to: format(query.date_to, 'yyyy-MM-dd'),
-            vehicle_id: query.vehicle_id,
+            page: input.query.page,
+            page_size: input.query.page_size,
+            date_from: format(input.query.date_from, 'yyyy-MM-dd'),
+            date_to: format(input.query.date_to, 'yyyy-MM-dd'),
+            vehicle_id: input.query.vehicle_id,
           },
         }),
       )
       .parseJson(withZod(listTripsResponseSchema))
       .build();
 
-    return this.performRequest(apiKey => call({ ...input, apiKey }));
+    return this.performRequest(apiKey => call({ input, apiKey }));
   }
 
   async listTripExpenses(
@@ -148,18 +148,24 @@ export class AbaxClient {
       );
     }
     const call = this.buildCall()
-      .args<GetOdometerValuesOfTripsInput>()
+      .args<{ input: GetOdometerValuesOfTripsInput }>()
       .method('get')
       .path('v1/trips/odometerReadings')
-      .query(({ query: { trip_ids } }) => {
-        const params = new URLSearchParams();
-        trip_ids.forEach(trip => params.append('trip_ids', trip));
-        return params;
-      })
+      .query(
+        ({
+          input: {
+            query: { trip_ids },
+          },
+        }) => {
+          const params = new URLSearchParams();
+          trip_ids.forEach(trip => params.append('trip_ids', trip));
+          return params;
+        },
+      )
       .parseJson(withZod(getOdometerValuesOfTripsResponseSchema))
       .build();
 
-    return this.performRequest(apiKey => call({ ...input, apiKey }));
+    return this.performRequest(apiKey => call({ input, apiKey }));
   }
   /** Gets equipment by ID. Required scopes: `abax_profile`, `open_api`, `open_api.equipment` */
   getEquipment(input: GetEquipmentInput): Promise<GetEquipmentResponse> {
@@ -243,20 +249,18 @@ export class AbaxClient {
     input: ListTripExpensesInput,
   ): Promise<listTripExpensesResponse> {
     const call = this.buildCall()
-      .args<ListTripExpensesInput>()
+      .args<{ input: ListTripExpensesInput }>()
       .method('get')
       .path('v1/trips/expense')
-      .query(({ query }) => {
+      .query(({ input }) => {
         const params = new URLSearchParams();
-
-        query.trip_ids.forEach(id => params.append('trip_ids', id));
-
+        input.query.trip_ids.forEach(id => params.append('trip_ids', id));
         return params;
       })
       .parseJson(withZod(listTripExpensesSchema))
       .build();
 
-    return this.performRequest(apiKey => call({ ...input, apiKey }));
+    return this.performRequest(apiKey => call({ input, apiKey }));
   }
 
   private makeApiUrl() {
