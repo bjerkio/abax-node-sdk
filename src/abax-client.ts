@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
-import { TypicalHttpError, buildCall } from 'typical-fetch';
+import { backOff } from 'exponential-backoff';
+import { type CallReturn, TypicalHttpError, buildCall } from 'typical-fetch';
 import {
   type GetEquipmentInput,
   type GetEquipmentResponse,
@@ -35,14 +36,15 @@ import {
   type ListVehiclesResponse,
   listVehiclesResponseSchema,
 } from './calls/list-vehicles.js';
-import { performRequest } from './common/perform-request.js';
 import { makeQuery, withZod } from './common/utils.js';
+
+export type ApiKeyFunc = () => string | Promise<string>;
 
 export interface AbaxClientConfig {
   /**
    * Abax API key
    */
-  apiKey: string;
+  apiKey: string | ApiKeyFunc;
 
   /**
    * @default 'production'
@@ -75,7 +77,7 @@ export class AbaxClient {
       .parseJson(withZod(listVehiclesResponseSchema))
       .build();
 
-    return performRequest(() => call(input));
+    return this.performRequest(apiKey => call({ ...input, apiKey }));
   }
 
   /** Gets paged list of Trips. Required scopes: `abax_profile`, `open_api`, `open_api.trips`.  */
@@ -98,7 +100,7 @@ export class AbaxClient {
       .parseJson(withZod(listTripsResponseSchema))
       .build();
 
-    return performRequest(() => call(input));
+    return this.performRequest(apiKey => call({ ...input, apiKey }));
   }
 
   async listTripExpenses(
@@ -151,7 +153,7 @@ export class AbaxClient {
       .parseJson(withZod(getOdometerValuesOfTripsResponseSchema))
       .build();
 
-    return performRequest(() => call(input));
+    return this.performRequest(apiKey => call({ ...input, apiKey }));
   }
   /** Gets equipment by ID. Required scopes: `abax_profile`, `open_api`, `open_api.equipment` */
   getEquipment(input: GetEquipmentInput): Promise<GetEquipmentResponse> {
@@ -162,7 +164,7 @@ export class AbaxClient {
       .parseJson(withZod(equipmentSchema))
       .build();
 
-    return performRequest(() => call({ input }));
+    return this.performRequest(apiKey => call({ input, apiKey }));
   }
 
   /** Gets paged list of equipment. Required scopes: `abax_profile`, `open_api`, `open_api.equipment`.  */
@@ -192,7 +194,7 @@ export class AbaxClient {
       .parseJson(withZod(listEquipmentResponse))
       .build();
 
-    return performRequest(() => call({ input }));
+    return this.performRequest(apiKey => call({ input, apiKey }));
   }
 
   /** Get paged list of usage logs. Required scopes: `abax_profile`, `open_api`, `open_api.equipment` */
@@ -228,7 +230,7 @@ export class AbaxClient {
       .parseJson(withZod(listEquipmentLogsResponseSchema))
       .build();
 
-    return performRequest(() => call({ input }));
+    return this.performRequest(apiKey => call({ input, apiKey }));
   }
 
   private list150TripExpenses(
@@ -248,7 +250,7 @@ export class AbaxClient {
       .parseJson(withZod(listTripExpensesSchema))
       .build();
 
-    return performRequest(() => call(input));
+    return this.performRequest(apiKey => call({ ...input, apiKey }));
   }
 
   private makeApiUrl() {
@@ -263,15 +265,49 @@ export class AbaxClient {
     return this.config.baseUrl;
   }
 
+  private async makeApiKey() {
+    if (typeof this.config.apiKey === 'function') {
+      return this.config.apiKey();
+    }
+
+    return this.config.apiKey;
+  }
+
+  private async performRequest<R, E>(
+    call: (apiKey: string) => Promise<CallReturn<R, E>>,
+  ): Promise<R> {
+    const requestCall = async (apiKey: string) => {
+      const res = await call(apiKey);
+
+      if (res.success) {
+        return res.body;
+      }
+
+      throw res.error;
+    };
+
+    const apiKey = await this.makeApiKey();
+
+    return backOff(() => requestCall(apiKey), {
+      retry: error => {
+        if (error instanceof TypicalHttpError && error.status === 429) {
+          return true;
+        }
+        return false;
+      },
+    });
+  }
+
   private buildCall() {
     const url = new URL(this.makeApiUrl());
 
     return buildCall()
       .baseUrl(url)
-      .headers({
+      .args<{ apiKey: string }>()
+      .headers(({ apiKey }) => ({
         'user-agent': this.config.userAgent ?? 'abax-node-sdk/1.0',
-        Authorization: `Bearer ${this.config.apiKey}`,
-      })
+        Authorization: `Bearer ${apiKey}`,
+      }))
       .mapError(async error => {
         if (error instanceof TypicalHttpError) {
           if (error.res.status === 401) {

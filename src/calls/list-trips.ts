@@ -15,7 +15,7 @@ export type ListTripsInput = QueryEnvelope<{
   /** The period cannot be longer than 3 months */
   date_to: Date;
 
-  vehicle_id: string;
+  vehicle_id?: string;
 }>;
 
 const locationPointSchema = z.object({
