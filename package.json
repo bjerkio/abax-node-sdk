@@ -27,14 +27,13 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@bjerk/eslint-config": "^5.0.0",
+    "@bjerk/eslint-config": "^5.3.1",
     "@simenandre/prettier": "^5.0.0",
     "@tsconfig/esm": "^1.0.3",
     "@tsconfig/node-lts": "^18.12.2",
     "@tsconfig/strictest": "^2.0.1",
     "@types/node": "^18",
-    "dotenv": "^16.3.1",
-    "eslint": "^8.43.0",
+    "eslint": "^8.45.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.3",
     "undici": "^5.22.1",

@@ -1,3 +1,3 @@
-export type QueryEnvelope<C> = { query: C };
+export interface QueryEnvelope<C> { query: C }
 
-export type BodyEnvelope<C> = { body: C };
+export interface BodyEnvelope<C> { body: C }

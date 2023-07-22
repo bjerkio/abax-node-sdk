@@ -22,7 +22,7 @@ export type AbaxScope =
   | 'open_api.sandbox.organization' // Request access to organization
   | 'offline_access';
 
-export type AbaxAuthConfig = {
+export interface AbaxAuthConfig {
   /**
    * The client ID
    */
@@ -51,7 +51,7 @@ export type AbaxAuthConfig = {
    * @default https://identity.abax.cloud
    */
   baseUrl?: string | undefined;
-};
+}
 
 export class AbaxAuth {
   private baseUrl = 'https://identity.abax.cloud';
