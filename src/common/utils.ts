@@ -4,7 +4,7 @@ export function withZod<T extends z.ZodTypeAny, Output = z.infer<T>>(
   schema: T,
 ): (data: unknown) => Output {
   return data => {
-    return schema.parse(data);
+    return schema.parse(data) as Output;
   };
 }
 
