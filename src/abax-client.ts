@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { backOff } from 'exponential-backoff';
+import { invariant } from 'ts-invariant';
 import { type CallReturn, TypicalHttpError, buildCall } from 'typical-fetch';
 import {
   type GetEquipmentInput,
@@ -49,7 +50,12 @@ export interface AbaxClientConfig {
   /**
    * @default 'production'
    */
-  baseUrl?: string | 'sandbox' | 'production';
+  environment?: 'sandbox' | 'production';
+
+  /**
+   * When set, overrides the environment setting
+   */
+  baseUrl?: string;
 
   /**
    * @default 'abax-node-sdk/1.0'
@@ -254,13 +260,15 @@ export class AbaxClient {
   }
 
   private makeApiUrl() {
-    if (this.config.baseUrl === 'production' || !this.config.baseUrl) {
+    if (this.config.environment === 'production' || !this.config.environment) {
       return apiUrls.production;
     }
 
-    if (this.config.baseUrl === 'sandbox') {
+    if (this.config.environment === 'sandbox') {
       return apiUrls.sandbox;
     }
+
+    invariant(this.config.baseUrl, 'baseUrl must be set when using custom env');
 
     return this.config.baseUrl;
   }
