@@ -63,8 +63,6 @@ const tripSchema = z
   })
   .transform(camelize);
 
-export type Trip = z.infer<typeof tripSchema>;
-
+export type Trip = z.output<typeof tripSchema>;
 export const listTripsResponseSchema = listResponseEnvelope(tripSchema);
-
 export type ListTripsResponse = z.infer<typeof listTripsResponseSchema>;

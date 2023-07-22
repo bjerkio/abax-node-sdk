@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import { buildCall } from 'typical-fetch';
 import type { z } from 'zod';
 
 export function formatDate(date: Date): string {
@@ -7,7 +6,7 @@ export function formatDate(date: Date): string {
 }
 
 /**
- * Formats in Minuba API date time format
+ * Formats in ABAX API date time format
  * @param date ISO 8601 date string
  */
 export function formatDateTime(date: Date): string {
