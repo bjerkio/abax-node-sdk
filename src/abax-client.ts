@@ -13,8 +13,8 @@ import {
   getOdometerValuesOfTripsResponseSchema,
 } from './calls/get-odometer-values.js';
 import {
-  listCapabilitiesResponseSchema,
   type ListCapabilitiesResponse,
+  listCapabilitiesResponseSchema,
 } from './calls/list-capabilities.js';
 import {
   type ListEquipmentLogsInput,
