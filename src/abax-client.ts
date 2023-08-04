@@ -13,6 +13,10 @@ import {
   getOdometerValuesOfTripsResponseSchema,
 } from './calls/get-odometer-values.js';
 import {
+  type ListCapabilitiesResponse,
+  listCapabilitiesResponseSchema,
+} from './calls/list-capabilities.js';
+import {
   type ListEquipmentLogsInput,
   type ListEquipmentLogsResponse,
   listEquipmentLogsResponseSchema,
@@ -243,6 +247,16 @@ export class AbaxClient {
       .build();
 
     return this.performRequest(apiKey => call({ input, apiKey }));
+  }
+
+  listCapabilities(): Promise<ListCapabilitiesResponse> {
+    const call = this.buildCall()
+      .method('get')
+      .path('/v1/api-capabilities')
+      .parseJson(withZod(listCapabilitiesResponseSchema))
+      .build();
+
+    return this.performRequest(apiKey => call({ apiKey }));
   }
 
   private list150TripExpenses(
