@@ -1,9 +1,9 @@
-import { getTokenCall, refreshCall } from './calls';
+import { getTokenCall, refreshCall } from './calls.js';
 import {
   type AbaxCredentials,
   AbaxGetTokenError,
   AbaxRefreshTokenError,
-} from './types';
+} from './types.js';
 
 export type AbaxScope =
   | 'openid' // request the JWT id_token

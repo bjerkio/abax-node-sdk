@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { equipmentSchema } from './get-equipment';
+import { equipmentSchema } from './get-equipment.js';
 
 export interface ListEquipmentInput {
   /** Defaults to 1 */
