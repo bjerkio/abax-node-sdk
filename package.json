@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "description": "SDK for Abax API",
   "license": "Apache-2.0",
+  "repository": "github:bjerkio/abax-node-sdk",
   "author": "Bjerk AS <office@bjerk.io> (https://bjerk.io)",
   "type": "module",
   "files": [
