@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AbaxClient } from './main';
+import { AbaxClient } from './main.js';
 
 describe('abax-client', () => {
   const initialiseClient = async () => {
