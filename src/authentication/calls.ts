@@ -1,6 +1,6 @@
 import { buildCall } from 'typical-fetch';
 import { z } from 'zod';
-import { withZod } from '../common/utils';
+import { withZod } from '../common/utils.js';
 
 export interface AuthorizationCodeInput {
   code?: string;
