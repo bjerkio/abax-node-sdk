@@ -1,3 +1,4 @@
+import { isBefore } from 'date-fns';
 import { getTokenCall, refreshCall } from './calls.js';
 import {
   type AbaxCredentials,
@@ -210,7 +211,7 @@ export class AbaxAuth {
     // check if token is expired
     if (
       this.credentials.refreshToken &&
-      this.credentials.expiresAt.getTime() < Date.now()
+      isBefore(this.credentials.expiresAt.getTime(), Date.now())
     ) {
       await this.refreshCredentials();
     }
