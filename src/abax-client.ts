@@ -42,6 +42,7 @@ import {
   listVehiclesResponseSchema,
 } from './calls/list-vehicles.js';
 import { makeQuery, withZod } from './common/utils.js';
+import { makeSearchParams } from './common.js';
 
 export type ApiKeyFunc = () => string | Promise<string>;
 
@@ -97,14 +98,12 @@ export class AbaxClient {
       .method('get')
       .path('v1/trips')
       .query(({ input }) =>
-        makeQuery({
-          query: {
-            page: input.query.page,
-            page_size: input.query.page_size,
-            date_from: format(input.query.date_from, 'yyyy-MM-dd'),
-            date_to: format(input.query.date_to, 'yyyy-MM-dd'),
-            vehicle_id: input.query.vehicle_id,
-          },
+        makeSearchParams({
+          page: input.page,
+          page_size: input.pageSize,
+          date_from: format(input.dateFrom, 'yyyy-MM-dd'),
+          date_to: format(input.dateTo, 'yyyy-MM-dd'),
+          vehicle_id: input.vehicleId,
         }),
       )
       .parseJson(withZod(listTripsResponseSchema))

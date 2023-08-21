@@ -3,6 +3,7 @@ import { z } from 'zod';
 export interface GetEquipmentInput {
   id: string;
 }
+
 const operatingHoursSchema = z.object({
   hours: z.number(),
   unit_driven: z.boolean(),
