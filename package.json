@@ -51,7 +51,7 @@
     "node": ">=18"
   },
   "exports": "./dist/main.js",
-  "packageManager": "pnpm@8.9.0",
+  "packageManager": "pnpm@8.10.0",
   "prettier": "@simenandre/prettier",
   "volta": {
     "node": "18.17.0"
