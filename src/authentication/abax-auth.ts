@@ -107,7 +107,6 @@ export class AbaxAuth {
     const result = await getTokenCall({
       baseUrl: this.baseUrl,
       input: {
-        grantType: 'authorization_code',
         clientId: this.config.clientId,
         clientSecret: this.config.clientSecret,
         redirectUri: this.config.redirectUri,
@@ -134,7 +133,6 @@ export class AbaxAuth {
     const result = await getTokenCall({
       baseUrl: this.baseUrl,
       input: {
-        grantType: 'client_credentials',
         clientId: this.config.clientId,
         clientSecret: this.config.clientSecret,
       },
