@@ -2,7 +2,7 @@ import { buildCall } from 'typical-fetch';
 import { z } from 'zod';
 import { withZod } from '../common/utils.js';
 
-export interface AuthorizationCodeInput {
+export interface GetTokenInput {
   code?: string;
   clientId: string;
   clientSecret: string;
@@ -26,7 +26,7 @@ export const authCodeResponseSchema = z
   }));
 
 export const getTokenCall = buildCall()
-  .args<{ input: AuthorizationCodeInput }>()
+  .args<{ input: GetTokenInput }>()
   .path('/connect/token')
   .headers({
     'user-agent': 'abax-node-sdk/1.0',
@@ -36,7 +36,8 @@ export const getTokenCall = buildCall()
   .body(({ input }) => {
     const body = new URLSearchParams();
 
-    body.append('grant_type', 'authorization_code');
+    const grantType = input.code ? 'authorization_code' : 'client_credentials';
+    body.append('grant_type', grantType);
     body.append('client_id', input.clientId);
     body.append('client_secret', input.clientSecret);
     if (input.code) {
