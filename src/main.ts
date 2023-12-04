@@ -9,5 +9,5 @@ export * from './calls/get-equipment.js';
 export * from './calls/list-equipment.js';
 export * from './authentication/abax-auth.js';
 export * from './authentication/types.js';
-export type { AuthorizationCodeInput } from './authentication/calls.js';
+export type { GetTokenInput } from './authentication/calls.js';
 export * from './authentication/decode-abax-profile.js';
