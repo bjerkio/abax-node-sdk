@@ -32,7 +32,7 @@
     "@bjerk/eslint-config": "^5.3.1",
     "@simenandre/prettier": "^5.0.0",
     "@tsconfig/esm": "^1.0.3",
-    "@tsconfig/node-lts": "^18.12.2",
+    "@tsconfig/node-lts": "^20.0.0",
     "@tsconfig/strictest": "^2.0.1",
     "@types/node": "^18",
     "eslint": "^8.45.0",
