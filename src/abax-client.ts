@@ -163,13 +163,19 @@ export class AbaxClient {
       [[]],
     );
 
-    const expenses = await Promise.all(
-      tripIdBatches.map(batch =>
-        this.getOdometerValuesOf150Trips({ query: { trip_ids: batch } }),
-      ),
-    );
+    const odometerValues: GetOdometerValuesOfTripsResponse['items'][] = [];
 
-    return { items: expenses.flatMap(expense => expense.items) };
+    for (const batch of tripIdBatches) {
+      const response = await this.getOdometerValuesOf150Trips({
+        query: { trip_ids: batch },
+      });
+
+      odometerValues.push(response.items);
+    }
+
+    const items = odometerValues.flat(1);
+
+    return { items };
   }
 
   /** Gets equipment by ID. Required scopes: `abax_profile`, `open_api`, `open_api.equipment` */
