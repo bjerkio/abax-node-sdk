@@ -133,13 +133,19 @@ export class AbaxClient {
       [[]],
     );
 
-    const expenses = await Promise.all(
-      tripIdBatches.map(batch =>
-        this.list150TripExpenses({ query: { trip_ids: batch } }),
-      ),
-    );
+    const expenses: listTripExpensesResponse['items'][] = [];
 
-    return { items: expenses.flatMap(expense => expense.items) };
+    for (const batch of tripIdBatches) {
+      const response = await this.list150TripExpenses({
+        query: { trip_ids: batch },
+      });
+
+      expenses.push(response.items);
+    }
+
+    const items = expenses.flat(1);
+
+    return { items };
   }
 
   async getOdometerValuesOfTrips(
