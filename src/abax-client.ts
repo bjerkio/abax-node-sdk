@@ -142,35 +142,40 @@ export class AbaxClient {
     return { items: expenses.flatMap(expense => expense.items) };
   }
 
+  /**
+   * Gets odometer values of trips. Required scopes: `abax_profile`, `open_api`, `open_api.trips`.
+   * @param input
+   * @returns
+   */
   async getOdometerValuesOfTrips(
     input: GetOdometerValuesOfTripsInput,
   ): Promise<GetOdometerValuesOfTripsResponse> {
-    // TODO: batch trips in batches of 150 (max allowed per query), similar to listTripExpenses
-    if (input.query.trip_ids.length > 150) {
-      throw new Error(
-        'Cannot get odometer values of more than 150 trips at once',
-      );
-    }
-    const call = this.buildCall()
-      .args<{ input: GetOdometerValuesOfTripsInput }>()
-      .method('get')
-      .path('v1/trips/odometerReadings')
-      .query(
-        ({
-          input: {
-            query: { trip_ids },
-          },
-        }) => {
-          const params = new URLSearchParams();
-          trip_ids.forEach(trip => params.append('trip_ids', trip));
-          return params;
-        },
-      )
-      .parseJson(withZod(getOdometerValuesOfTripsResponseSchema))
-      .build();
+    const tripIdBatches = input.query.trip_ids.reduce<string[][]>(
+      (batches, tripId) => {
+        const currentBatchIndex = batches.length - 1;
 
-    return this.performRequest(apiKey => call({ input, apiKey }));
+        if (batches[currentBatchIndex]?.length === 150) {
+          batches.push([tripId]);
+        } else if (batches[currentBatchIndex]) {
+          batches[currentBatchIndex]?.push(tripId);
+        } else {
+          batches[currentBatchIndex] = [tripId];
+        }
+
+        return batches;
+      },
+      [[]],
+    );
+
+    const expenses = await Promise.all(
+      tripIdBatches.map(batch =>
+        this.getOdometerValuesOf150Trips({ query: { trip_ids: batch } }),
+      ),
+    );
+
+    return { items: expenses.flatMap(expense => expense.items) };
   }
+
   /** Gets equipment by ID. Required scopes: `abax_profile`, `open_api`, `open_api.equipment` */
   getEquipment(input: GetEquipmentInput): Promise<GetEquipmentResponse> {
     const call = this.buildCall()
@@ -272,6 +277,35 @@ export class AbaxClient {
         return params;
       })
       .parseJson(withZod(listTripExpensesSchema))
+      .build();
+
+    return this.performRequest(apiKey => call({ input, apiKey }));
+  }
+
+  private async getOdometerValuesOf150Trips(
+    input: GetOdometerValuesOfTripsInput,
+  ): Promise<GetOdometerValuesOfTripsResponse> {
+    if (input.query.trip_ids.length > 150) {
+      throw new Error(
+        'Cannot get odometer values of more than 150 trips at once',
+      );
+    }
+    const call = this.buildCall()
+      .args<{ input: GetOdometerValuesOfTripsInput }>()
+      .method('get')
+      .path('v1/trips/odometerReadings')
+      .query(
+        ({
+          input: {
+            query: { trip_ids },
+          },
+        }) => {
+          const params = new URLSearchParams();
+          trip_ids.forEach(trip => params.append('trip_ids', trip));
+          return params;
+        },
+      )
+      .parseJson(withZod(getOdometerValuesOfTripsResponseSchema))
       .build();
 
     return this.performRequest(apiKey => call({ input, apiKey }));

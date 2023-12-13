@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { QueryEnvelope } from '../common/types.js';
 
 export type GetOdometerValuesOfTripsInput = QueryEnvelope<{
-  /** Ids of trips. Can have up to 150 ids */
+  /** Ids of trips. */
   trip_ids: string[];
 }>;
 
