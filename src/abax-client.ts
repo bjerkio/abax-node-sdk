@@ -142,11 +142,7 @@ export class AbaxClient {
     return { items: expenses.flatMap(expense => expense.items) };
   }
 
-  /**
-   * Gets odometer values of trips. Required scopes: `abax_profile`, `open_api`, `open_api.trips`.
-   * @param input
-   * @returns
-   */
+  /** Gets odometer values of trips. Required scopes: `abax_profile`, `open_api`, `open_api.trips`.*/
   async getOdometerValuesOfTrips(
     input: GetOdometerValuesOfTripsInput,
   ): Promise<GetOdometerValuesOfTripsResponse> {
