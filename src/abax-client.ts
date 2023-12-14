@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { addMinutes, format, setMilliseconds, setSeconds } from 'date-fns';
 import { backOff } from 'exponential-backoff';
 import { invariant } from 'ts-invariant';
 import { type CallReturn, TypicalHttpError, buildCall } from 'typical-fetch';
@@ -72,8 +72,21 @@ const apiUrls = {
   production: 'https://api.abax.cloud',
 };
 
+function startOfTheNextMinute(): Date {
+  const now = new Date();
+  addMinutes(now, 1);
+  setSeconds(now, 0);
+  setMilliseconds(now, 0);
+  return now;
+}
 export class AbaxClient {
-  constructor(private readonly config: AbaxClientConfig) {}
+  remainingRequests: number;
+  resetTime: Date;
+
+  constructor(private readonly config: AbaxClientConfig) {
+    this.remainingRequests = 60;
+    this.resetTime = startOfTheNextMinute();
+  }
 
   /** Gets paged list of Vehicles. Required scopes: `abax_profile`, `open_api`, `open_api.vehicles`.  */
   listVehicles(
@@ -344,6 +357,17 @@ export class AbaxClient {
   private async performRequest<R, E>(
     call: (apiKey: string) => Promise<CallReturn<R, E>>,
   ): Promise<R> {
+    if (this.remainingRequests === 0) {
+      const now = new Date();
+
+      if (now < this.resetTime) {
+        await new Promise(resolve =>
+          setTimeout(resolve, this.resetTime.getTime() - now.getTime()),
+        );
+      }
+      this.remainingRequests = 60;
+    }
+
     const requestCall = async (apiKey: string) => {
       const res = await call(apiKey);
 
@@ -376,6 +400,23 @@ export class AbaxClient {
         'user-agent': this.config.userAgent ?? 'abax-node-sdk/1.0',
         Authorization: `Bearer ${apiKey}`,
       }))
+      .parseResponse(response => {
+        const remainingRequests = response.headers.get(
+          'X-Ratelimit-Remaining-Minute',
+        );
+        if (remainingRequests) {
+          this.remainingRequests = Number(remainingRequests);
+        }
+
+        const resetTime = response.headers.get('X-Rate-Limit-Reset');
+
+        if (resetTime === null) {
+          // set reset time to start of the next minute
+          this.resetTime = startOfTheNextMinute();
+        } else {
+          this.resetTime = new Date(resetTime);
+        }
+      })
       .mapError(async error => {
         if (error instanceof TypicalHttpError) {
           if (error.res.status === 401) {
