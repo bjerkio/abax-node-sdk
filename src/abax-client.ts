@@ -1,5 +1,4 @@
-import { format } from 'date-fns';
-import { backOff } from 'exponential-backoff';
+import { format, isAfter } from 'date-fns';
 import { invariant } from 'ts-invariant';
 import { type CallReturn, TypicalHttpError, buildCall } from 'typical-fetch';
 import {
@@ -73,19 +72,13 @@ const apiUrls = {
 };
 
 export class AbaxClient {
-  remainingRequests: number;
-  resetTime: Date;
-
-  constructor(private readonly config: AbaxClientConfig) {
-    this.remainingRequests = 60;
-    this.resetTime = startOfTheNextMinute();
-  }
+  constructor(private readonly config: AbaxClientConfig) {}
 
   /** Gets paged list of Vehicles. Required scopes: `abax_profile`, `open_api`, `open_api.vehicles`.  */
   listVehicles(
     input: ListVehiclesInput = { query: undefined },
   ): Promise<ListVehiclesResponse> {
-    const call = this.buildCall()
+    const call = this.authenticatedCall()
       .args<{ input: ListVehiclesInput }>()
       .method('get')
       .path('v1/vehicles')
@@ -98,7 +91,7 @@ export class AbaxClient {
 
   /** Gets paged list of Trips. Required scopes: `abax_profile`, `open_api`, `open_api.trips`.  */
   listTrips(input: ListTripsInput): Promise<ListTripsResponse> {
-    const call = this.buildCall()
+    const call = this.authenticatedCall()
       .args<{ input: ListTripsInput }>()
       .method('get')
       .path('v1/trips')
@@ -192,7 +185,7 @@ export class AbaxClient {
 
   /** Gets equipment by ID. Required scopes: `abax_profile`, `open_api`, `open_api.equipment` */
   getEquipment(input: GetEquipmentInput): Promise<GetEquipmentResponse> {
-    const call = this.buildCall()
+    const call = this.authenticatedCall()
       .args<{ input: GetEquipmentInput }>()
       .method('get')
       .path(({ input: { id } }) => `/v2/equipment/${id}`)
@@ -206,7 +199,7 @@ export class AbaxClient {
   listEquipment(
     input: ListEquipmentInput = {},
   ): Promise<ListEquipmentResponse> {
-    const call = this.buildCall()
+    const call = this.authenticatedCall()
       .args<{ input: ListEquipmentInput }>()
       .method('get')
       .path('/v2/equipment/')
@@ -236,7 +229,7 @@ export class AbaxClient {
   async listEquipmentLogs(
     input: ListEquipmentLogsInput,
   ): Promise<ListEquipmentLogsResponse> {
-    const call = this.buildCall()
+    const call = this.authenticatedCall()
       .args<{ input: ListEquipmentLogsInput }>()
       .method('get')
       .path('/v2/equipment/usage-log')
@@ -269,7 +262,7 @@ export class AbaxClient {
   }
 
   listCapabilities(): Promise<ListCapabilitiesResponse> {
-    const call = this.buildCall()
+    const call = this.authenticatedCall()
       .method('get')
       .path('/v1/api-capabilities')
       .parseJson(withZod(listCapabilitiesResponseSchema))
@@ -281,7 +274,7 @@ export class AbaxClient {
   private list150TripExpenses(
     input: ListTripExpensesInput,
   ): Promise<listTripExpensesResponse> {
-    const call = this.buildCall()
+    const call = this.authenticatedCall()
       .args<{ input: ListTripExpensesInput }>()
       .method('get')
       .path('v1/trips/expense')
@@ -304,7 +297,7 @@ export class AbaxClient {
         'Cannot get odometer values of more than 150 trips at once',
       );
     }
-    const call = this.buildCall()
+    const call = this.authenticatedCall()
       .args<{ input: GetOdometerValuesOfTripsInput }>()
       .method('get')
       .path('v1/trips/odometerReadings')
@@ -350,40 +343,41 @@ export class AbaxClient {
   private async performRequest<R, E>(
     call: (apiKey: string) => Promise<CallReturn<R, E>>,
   ): Promise<R> {
-    if (this.remainingRequests === 0) {
-      const now = new Date();
+    const apiKey = await this.makeApiKey();
 
-      if (now < this.resetTime) {
-        await new Promise(resolve =>
-          setTimeout(resolve, this.resetTime.getTime() - now.getTime()),
-        );
-      }
-      this.remainingRequests = 60;
-    }
-
-    const requestCall = async (apiKey: string) => {
+    for (let n = 0; n <= 3; n++) {
       const res = await call(apiKey);
 
       if (res.success) {
         return res.body;
       }
 
-      throw res.error;
-    };
+      const { error } = res;
 
-    const apiKey = await this.makeApiKey();
-
-    return backOff(() => requestCall(apiKey), {
-      retry: error => {
-        if (error instanceof TypicalHttpError && error.status === 429) {
-          return true;
+      if (error instanceof TypicalHttpError && error.status === 429) {
+        if (n >= 3) {
+          throw new Error('Request timed out');
         }
-        return false;
-      },
-    });
+
+        const resetHeader =
+          error.res.headers?.get('X-Rate-Limit-Reset') ??
+          startOfTheNextMinute();
+        const resetTime = new Date(resetHeader);
+
+        const now = new Date();
+
+        if (isAfter(resetTime, now)) {
+          await new Promise(resolve =>
+            setTimeout(resolve, resetTime.getTime() - now.getTime()),
+          );
+        }
+      }
+    }
+
+    throw new Error('Not able to perform request');
   }
 
-  private buildCall() {
+  private authenticatedCall() {
     const url = new URL(this.makeApiUrl());
 
     return buildCall()
@@ -392,33 +386,6 @@ export class AbaxClient {
       .headers(({ apiKey }) => ({
         'user-agent': this.config.userAgent ?? 'abax-node-sdk/1.0',
         Authorization: `Bearer ${apiKey}`,
-      }))
-      .parseResponse(response => {
-        const remainingRequests = response.headers.get(
-          'X-Ratelimit-Remaining-Minute',
-        );
-        if (remainingRequests) {
-          this.remainingRequests = Number(remainingRequests);
-        }
-
-        const resetTime = response.headers.get('X-Rate-Limit-Reset');
-
-        if (resetTime === null) {
-          // set reset time to start of the next minute
-          this.resetTime = startOfTheNextMinute();
-        } else {
-          this.resetTime = new Date(resetTime);
-        }
-      })
-      .mapError(async error => {
-        if (error instanceof TypicalHttpError) {
-          if (error.res.status === 401) {
-            // TODO: throw 401
-            throw error;
-          }
-          throw error;
-        }
-        throw error;
-      });
+      }));
   }
 }
