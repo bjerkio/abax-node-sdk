@@ -1,4 +1,4 @@
-import { addMinutes, format, setMilliseconds, setSeconds } from 'date-fns';
+import { format } from 'date-fns';
 import { backOff } from 'exponential-backoff';
 import { invariant } from 'ts-invariant';
 import { type CallReturn, TypicalHttpError, buildCall } from 'typical-fetch';
@@ -41,7 +41,7 @@ import {
   type ListVehiclesResponse,
   listVehiclesResponseSchema,
 } from './calls/list-vehicles.js';
-import { makeQuery, withZod } from './common/utils.js';
+import { makeQuery, startOfTheNextMinute, withZod } from './common/utils.js';
 
 export type ApiKeyFunc = () => string | Promise<string>;
 
@@ -72,13 +72,6 @@ const apiUrls = {
   production: 'https://api.abax.cloud',
 };
 
-function startOfTheNextMinute(): Date {
-  const now = new Date();
-  addMinutes(now, 1);
-  setSeconds(now, 0);
-  setMilliseconds(now, 0);
-  return now;
-}
 export class AbaxClient {
   remainingRequests: number;
   resetTime: Date;
