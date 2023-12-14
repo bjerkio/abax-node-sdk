@@ -41,7 +41,7 @@ import {
   type ListVehiclesResponse,
   listVehiclesResponseSchema,
 } from './calls/list-vehicles.js';
-import { makeQuery, withZod } from './common/utils.js';
+import { makeQuery, startOfTheNextMinute, withZod } from './common/utils.js';
 
 export type ApiKeyFunc = () => string | Promise<string>;
 
@@ -73,7 +73,13 @@ const apiUrls = {
 };
 
 export class AbaxClient {
-  constructor(private readonly config: AbaxClientConfig) {}
+  remainingRequests: number;
+  resetTime: Date;
+
+  constructor(private readonly config: AbaxClientConfig) {
+    this.remainingRequests = 60;
+    this.resetTime = startOfTheNextMinute();
+  }
 
   /** Gets paged list of Vehicles. Required scopes: `abax_profile`, `open_api`, `open_api.vehicles`.  */
   listVehicles(
@@ -344,6 +350,17 @@ export class AbaxClient {
   private async performRequest<R, E>(
     call: (apiKey: string) => Promise<CallReturn<R, E>>,
   ): Promise<R> {
+    if (this.remainingRequests === 0) {
+      const now = new Date();
+
+      if (now < this.resetTime) {
+        await new Promise(resolve =>
+          setTimeout(resolve, this.resetTime.getTime() - now.getTime()),
+        );
+      }
+      this.remainingRequests = 60;
+    }
+
     const requestCall = async (apiKey: string) => {
       const res = await call(apiKey);
 
@@ -376,6 +393,23 @@ export class AbaxClient {
         'user-agent': this.config.userAgent ?? 'abax-node-sdk/1.0',
         Authorization: `Bearer ${apiKey}`,
       }))
+      .parseResponse(response => {
+        const remainingRequests = response.headers.get(
+          'X-Ratelimit-Remaining-Minute',
+        );
+        if (remainingRequests) {
+          this.remainingRequests = Number(remainingRequests);
+        }
+
+        const resetTime = response.headers.get('X-Rate-Limit-Reset');
+
+        if (resetTime === null) {
+          // set reset time to start of the next minute
+          this.resetTime = startOfTheNextMinute();
+        } else {
+          this.resetTime = new Date(resetTime);
+        }
+      })
       .mapError(async error => {
         if (error instanceof TypicalHttpError) {
           if (error.res.status === 401) {

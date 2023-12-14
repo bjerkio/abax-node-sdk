@@ -1,3 +1,4 @@
+import { addMinutes, setMilliseconds, setSeconds } from 'date-fns';
 import type { z } from 'zod';
 
 export function withZod<T extends z.ZodTypeAny, Output = z.infer<T>>(
@@ -40,4 +41,12 @@ export function makeBody(data: {
   });
 
   return params;
+}
+
+export function startOfTheNextMinute(): Date {
+  const now = new Date();
+  addMinutes(now, 1);
+  setSeconds(now, 0);
+  setMilliseconds(now, 0);
+  return now;
 }
