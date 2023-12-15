@@ -5,7 +5,7 @@ export const driverSchema = z.object({
   external_id: z.string().optional(),
   name: z.string().optional(),
   phone_number: z.string().optional(),
-  email: z.string().email().optional(),
+  email: z.string().optional(),
 });
 
 export const vehicleCommercialClassSchema = z.enum([
