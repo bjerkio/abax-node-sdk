@@ -32,8 +32,11 @@ describe('abax-client', () => {
       })
       .reply(() => ({
         statusCode: 429,
-      }));
+      }))
+      .persist();
 
-    expect(() => client.listVehicles()).toThrow('Request timed out');
+    await expect(() => client.listVehicles()).rejects.toThrow(
+      'Request timed out',
+    );
   });
 });
