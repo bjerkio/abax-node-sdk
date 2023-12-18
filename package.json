@@ -21,7 +21,7 @@
     "test:ui": "TZ=UTC vitest --ui"
   },
   "dependencies": {
-    "date-fns": "^2.30.0",
+    "date-fns": "^3.0.0",
     "exponential-backoff": "^3.1.1",
     "fast-jwt": "^3.1.1",
     "ts-invariant": "^0.10.3",
