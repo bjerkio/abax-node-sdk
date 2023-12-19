@@ -1,3 +1,4 @@
+import { addMilliseconds } from 'date-fns';
 import { type Interceptable, MockAgent, setGlobalDispatcher } from 'undici';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { AbaxClient } from './main.js';
@@ -32,6 +33,14 @@ describe('abax-client', () => {
       })
       .reply(() => ({
         statusCode: 429,
+        responseOptions: {
+          headers: {
+            'X-Rate-Limit-Reset': addMilliseconds(
+              new Date(),
+              100,
+            ).toISOString(),
+          },
+        },
       }))
       .times(4);
 
@@ -50,6 +59,14 @@ describe('abax-client', () => {
       })
       .reply(() => ({
         statusCode: 429,
+        responseOptions: {
+          headers: {
+            'X-Rate-Limit-Reset': addMilliseconds(
+              new Date(),
+              100,
+            ).toISOString(),
+          },
+        },
       }))
       .times(3);
 
