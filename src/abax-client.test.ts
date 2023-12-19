@@ -57,7 +57,7 @@ describe('abax-client', () => {
         path: '/v1/vehicles',
         method: 'GET',
       })
-      .reply(s => ({
+      .reply(() => ({
         statusCode: 429,
         responseOptions: {
           headers: {
