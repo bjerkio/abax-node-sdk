@@ -21,7 +21,7 @@ export const abaxIdTokenPayload = z.object({
   'http://schemas.abax.no/identity/claims/countrycode': z.string(),
   email: z.string(),
   email_verified: z.boolean(),
-  phone_number: z.string(),
+  phone_number: z.string().optional(),
   'http://schemas.abax.no/identity/claims/securitystamp': z.string(),
 });
 
