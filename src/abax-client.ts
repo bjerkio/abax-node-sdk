@@ -274,6 +274,14 @@ export class AbaxClient {
   private list150TripExpenses(
     input: ListTripExpensesInput,
   ): Promise<listTripExpensesResponse> {
+    if (input.query.trip_ids.length === 0) {
+      return Promise.resolve({ items: [] });
+    }
+
+    if (input.query.trip_ids.length > 150) {
+      return this.listTripExpenses(input);
+    }
+
     const call = this.authenticatedCall()
       .args<{ input: ListTripExpensesInput }>()
       .method('get')
@@ -292,11 +300,13 @@ export class AbaxClient {
   private async getOdometerValuesOf150Trips(
     input: GetOdometerValuesOfTripsInput,
   ): Promise<GetOdometerValuesOfTripsResponse> {
-    if (input.query.trip_ids.length > 150) {
-      throw new Error(
-        'Cannot get odometer values of more than 150 trips at once',
-      );
+    if (input.query.trip_ids.length === 0) {
+      return Promise.resolve({ items: [] });
     }
+    if (input.query.trip_ids.length > 150) {
+      return this.getOdometerValuesOfTrips(input);
+    }
+
     const call = this.authenticatedCall()
       .args<{ input: GetOdometerValuesOfTripsInput }>()
       .method('get')
