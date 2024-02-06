@@ -29,7 +29,7 @@ import {
   type ListUsageSummaryInput,
   type ListUsageSummaryResponse,
   listUsageSummaryResponseSchema,
-} from './calls/list-summary-usage.js';
+} from './calls/list-usage-summary.js';
 import {
   type ListTripExpensesInput,
   type listTripExpensesResponse,
