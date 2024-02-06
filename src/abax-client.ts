@@ -26,11 +26,6 @@ import {
   listEquipmentResponse,
 } from './calls/list-equipment.js';
 import {
-  type ListUsageSummaryInput,
-  type ListUsageSummaryResponse,
-  listUsageSummaryResponseSchema,
-} from './calls/list-usage-summary.js';
-import {
   type ListTripExpensesInput,
   type listTripExpensesResponse,
   listTripExpensesSchema,
@@ -40,6 +35,11 @@ import {
   type ListTripsResponse,
   listTripsResponseSchema,
 } from './calls/list-trips.js';
+import {
+  type ListUsageSummaryInput,
+  type ListUsageSummaryResponse,
+  listUsageSummaryResponseSchema,
+} from './calls/list-usage-summary.js';
 import {
   type ListVehiclesInput,
   type ListVehiclesResponse,
