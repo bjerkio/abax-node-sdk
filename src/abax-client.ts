@@ -41,6 +41,7 @@ import {
   listVehiclesResponseSchema,
 } from './calls/list-vehicles.js';
 import { makeQuery, startOfTheNextMinute, withZod } from './common/utils.js';
+import { ListUsageSummaryInput, ListUsageSummaryResponse, listUsageSummaryResponseSchema } from './calls/list-summary-usage.js';
 
 export type ApiKeyFunc = () => string | Promise<string>;
 
@@ -72,7 +73,7 @@ const apiUrls = {
 };
 
 export class AbaxClient {
-  constructor(private readonly config: AbaxClientConfig) {}
+  constructor(private readonly config: AbaxClientConfig) { }
 
   /** Gets paged list of Vehicles. Required scopes: `abax_profile`, `open_api`, `open_api.vehicles`.  */
   listVehicles(
@@ -107,6 +108,24 @@ export class AbaxClient {
         }),
       )
       .parseJson(withZod(listTripsResponseSchema))
+      .build();
+
+    return this.performRequest(apiKey => call({ input, apiKey }));
+  }
+
+  listUsageSummary(input: ListUsageSummaryInput): Promise<ListUsageSummaryResponse> {
+    // URL: /v1/vehicles/{vehicle-id}/usage-summary?from=<datetime>&to=<datetime>
+    const call = this.authenticatedCall()
+      .args<{ input: ListUsageSummaryInput }>()
+      .method('get')
+      .path(({ input: { vehicle_id } }) => `/v1/vehicles/${vehicle_id}/usage-summary`)
+      .query(({ input }) => {
+        const queryParams = new URLSearchParams();
+        queryParams.append('from', format(input.date_from, "yyyy-MM-dd"));
+        queryParams.append('to', format(input.date_to, "yyyy-MM-dd"));
+        return queryParams;
+      })
+      .parseJson(withZod(listUsageSummaryResponseSchema))
       .build();
 
     return this.performRequest(apiKey => call({ input, apiKey }));
