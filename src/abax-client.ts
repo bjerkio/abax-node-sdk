@@ -26,8 +26,8 @@ import {
   listEquipmentResponse,
 } from './calls/list-equipment.js';
 import {
-  ListUsageSummaryInput,
-  ListUsageSummaryResponse,
+  type ListUsageSummaryInput,
+  type ListUsageSummaryResponse,
   listUsageSummaryResponseSchema,
 } from './calls/list-summary-usage.js';
 import {
