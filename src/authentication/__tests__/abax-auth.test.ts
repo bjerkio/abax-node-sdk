@@ -41,11 +41,11 @@ describe('abax auth', async () => {
         method: 'POST',
       })
       .reply(200, {
-        access_token: 'access_token',
-        expires_in: 3600,
-        id_token: 'id_token',
-        token_type: 'Bearer',
-        refresh_token: 'refresh_token',
+        accessToken: 'access_token',
+        expiresIn: 3600,
+        idToken: 'id_token',
+        tokenType: 'Bearer',
+        refreshToken: 'refresh_token',
       });
 
     const date = new Date(2000, 1, 1, 13);
@@ -96,11 +96,11 @@ describe('abax auth', async () => {
         method: 'POST',
       })
       .reply(200, {
-        access_token: 'new_access_token',
-        expires_in: 3600,
-        id_token: 'id_token',
-        token_type: 'Bearer',
-        refresh_token: 'new_refresh_token',
+        accessToken: 'new_access_token',
+        expiresIn: 3600,
+        idToken: 'id_token',
+        tokenType: 'Bearer',
+        refreshToken: 'new_refresh_token',
       });
 
     const token = await auth.getAccessToken();

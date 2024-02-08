@@ -104,10 +104,10 @@ export class AbaxClient {
         makeQuery({
           query: {
             page: input.query.page,
-            page_size: input.query.page_size,
-            date_from: format(input.query.date_from, 'yyyy-MM-dd'),
-            date_to: format(input.query.date_to, 'yyyy-MM-dd'),
-            vehicle_id: input.query.vehicle_id,
+            pageSize: input.query.pageSize,
+            dateFrom: format(input.query.dateFrom, 'yyyy-MM-dd'),
+            dateTo: format(input.query.dateTo, 'yyyy-MM-dd'),
+            vehicleId: input.query.vehicleId,
           },
         }),
       )
@@ -125,13 +125,13 @@ export class AbaxClient {
       .args<{ input: ListUsageSummaryInput }>()
       .method('get')
       .path(
-        ({ input: { vehicle_id } }) =>
-          `/v1/vehicles/${vehicle_id}/usage-summary`,
+        ({ input: { vehicleId: vehicleId } }) =>
+          `/v1/vehicles/${vehicleId}/usage-summary`,
       )
       .query(({ input }) => {
         const queryParams = new URLSearchParams();
-        queryParams.append('from', format(input.date_from, 'yyyy-MM-dd'));
-        queryParams.append('to', format(input.date_to, 'yyyy-MM-dd'));
+        queryParams.append('from', format(input.dateFrom, 'yyyy-MM-dd'));
+        queryParams.append('to', format(input.dateTo, 'yyyy-MM-dd'));
         return queryParams;
       })
       .parseJson(withZod(listUsageSummaryResponseSchema))
@@ -143,7 +143,7 @@ export class AbaxClient {
   async listTripExpenses(
     input: ListTripExpensesInput,
   ): Promise<listTripExpensesResponse> {
-    const tripIdBatches = input.query.trip_ids.reduce<string[][]>(
+    const tripIdBatches = input.query.tripIds.reduce<string[][]>(
       (batches, tripId) => {
         const currentBatchIndex = batches.length - 1;
 
@@ -164,7 +164,7 @@ export class AbaxClient {
 
     for (const batch of tripIdBatches) {
       const response = await this.list150TripExpenses({
-        query: { trip_ids: batch },
+        query: { tripIds: batch },
       });
 
       expenses.push(response.items);
@@ -179,7 +179,7 @@ export class AbaxClient {
   async getOdometerValuesOfTrips(
     input: GetOdometerValuesOfTripsInput,
   ): Promise<GetOdometerValuesOfTripsResponse> {
-    const tripIdBatches = input.query.trip_ids.reduce<string[][]>(
+    const tripIdBatches = input.query.tripIds.reduce<string[][]>(
       (batches, tripId) => {
         const currentBatchIndex = batches.length - 1;
 
@@ -200,7 +200,7 @@ export class AbaxClient {
 
     for (const batch of tripIdBatches) {
       const response = await this.getOdometerValuesOf150Trips({
-        query: { trip_ids: batch },
+        query: { tripIds: batch },
       });
 
       odometerValues.push(response.items);
@@ -231,18 +231,18 @@ export class AbaxClient {
       .args<{ input: ListEquipmentInput }>()
       .method('get')
       .path('/v2/equipment/')
-      .query(({ input: { page, page_size, unit_types } }) => {
+      .query(({ input: { page, pageSize: pageSize, unitTypes: unitTypes } }) => {
         const queryParams = new URLSearchParams();
 
         if (page) {
           queryParams.append('page', String(page));
         }
-        if (page_size) {
-          queryParams.append('page_size', String(page_size));
+        if (pageSize) {
+          queryParams.append('page_size', String(pageSize));
         }
 
-        if (unit_types) {
-          queryParams.append('unit_types', String(unit_types));
+        if (unitTypes) {
+          queryParams.append('unit_types', String(unitTypes));
         }
 
         return queryParams;
@@ -261,24 +261,24 @@ export class AbaxClient {
       .args<{ input: ListEquipmentLogsInput }>()
       .method('get')
       .path('/v2/equipment/usage-log')
-      .query(({ input: { page, page_size, date_from, date_to } }) => {
+      .query(({ input: { page, pageSize: pageSize, dateFrom: dateFrom, dateTo: dateTo } }) => {
         const queryParams = new URLSearchParams();
 
         queryParams.append(
           'date_from',
-          format(date_from, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+          format(dateFrom, "yyyy-MM-dd'T'HH:mm:ssxxx"),
         );
 
         queryParams.append(
           'date_to',
-          format(date_to, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+          format(dateTo, "yyyy-MM-dd'T'HH:mm:ssxxx"),
         );
 
         if (page) {
           queryParams.append('page', String(page));
         }
-        if (page_size) {
-          queryParams.append('page_size', String(page_size));
+        if (pageSize) {
+          queryParams.append('page_size', String(pageSize));
         }
 
         return queryParams;
@@ -302,11 +302,11 @@ export class AbaxClient {
   private list150TripExpenses(
     input: ListTripExpensesInput,
   ): Promise<listTripExpensesResponse> {
-    if (input.query.trip_ids.length === 0) {
+    if (input.query.tripIds.length === 0) {
       return Promise.resolve({ items: [] });
     }
 
-    if (input.query.trip_ids.length > 150) {
+    if (input.query.tripIds.length > 150) {
       return this.listTripExpenses(input);
     }
 
@@ -316,7 +316,7 @@ export class AbaxClient {
       .path('v1/trips/expense')
       .query(({ input }) => {
         const params = new URLSearchParams();
-        input.query.trip_ids.forEach(id => params.append('trip_ids', id));
+        input.query.tripIds.forEach(id => params.append('trip_ids', id));
         return params;
       })
       .parseJson(withZod(listTripExpensesSchema))
@@ -328,10 +328,10 @@ export class AbaxClient {
   private async getOdometerValuesOf150Trips(
     input: GetOdometerValuesOfTripsInput,
   ): Promise<GetOdometerValuesOfTripsResponse> {
-    if (input.query.trip_ids.length === 0) {
+    if (input.query.tripIds.length === 0) {
       return Promise.resolve({ items: [] });
     }
-    if (input.query.trip_ids.length > 150) {
+    if (input.query.tripIds.length > 150) {
       return this.getOdometerValuesOfTrips(input);
     }
 
@@ -342,11 +342,11 @@ export class AbaxClient {
       .query(
         ({
           input: {
-            query: { trip_ids },
+            query: { tripIds: tripIds },
           },
         }) => {
           const params = new URLSearchParams();
-          trip_ids.forEach(trip => params.append('trip_ids', trip));
+          tripIds.forEach(trip => params.append('trip_ids', trip));
           return params;
         },
       )

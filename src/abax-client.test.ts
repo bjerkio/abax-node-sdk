@@ -79,7 +79,7 @@ describe('abax-client', () => {
         statusCode: 200,
         data: {
           page: 1,
-          page_size: 150,
+          pageSize: 150,
           items: [],
         },
       }))
@@ -89,7 +89,7 @@ describe('abax-client', () => {
     expect(vehicles).toEqual({
       items: [],
       page: 1,
-      page_size: 150,
+      pageSize: 150,
     });
   });
 });

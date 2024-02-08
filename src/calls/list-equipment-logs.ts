@@ -5,27 +5,27 @@ export interface ListEquipmentLogsInput {
   page?: number;
 
   /** Defaults to 1500 */
-  page_size?: number;
+  pageSize?: number;
 
   /** The period cannot be longer than 3 months */
-  date_from: Date;
+  dateFrom: Date;
 
   /** The period cannot be longer than 3 months */
-  date_to: Date;
+  dateTo: Date;
 }
 const equipmentLogSchema = z.object({
-  equipment_id: z.string(),
-  usage_log_id: z.number(),
+  equipmentId: z.string(),
+  usageLogId: z.number(),
   address: z.string(),
-  start_time: z.string(),
-  end_time: z.string(),
-  input_type: z.enum(['Yellow', 'White', 'Blue']),
+  startTime: z.string(),
+  endTime: z.string(),
+  inputType: z.enum(['Yellow', 'White', 'Blue']),
   usage: z.number(),
 });
 
 export const listEquipmentLogsResponseSchema = z.object({
   page: z.number(),
-  page_size: z.number(),
+  pageSize: z.number(),
   items: z.array(equipmentLogSchema),
 });
 

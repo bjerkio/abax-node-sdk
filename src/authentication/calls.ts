@@ -11,18 +11,18 @@ export interface GetTokenInput {
 
 export const authCodeResponseSchema = z
   .object({
-    id_token: z.string().optional(),
-    access_token: z.string(),
-    expires_in: z.number(),
-    token_type: z.literal('Bearer'),
-    refresh_token: z.string().optional(),
+    idToken: z.string().optional(),
+    accessToken: z.string(),
+    expiresIn: z.number(),
+    tokenType: z.literal('Bearer'),
+    refreshToken: z.string().optional(),
   })
   .transform(data => ({
-    idToken: data.id_token,
-    accessToken: data.access_token,
-    expiresIn: data.expires_in,
-    tokenType: data.token_type,
-    refreshToken: data.refresh_token,
+    idToken: data.idToken,
+    accessToken: data.accessToken,
+    expiresIn: data.expiresIn,
+    tokenType: data.tokenType,
+    refreshToken: data.refreshToken,
   }));
 
 export const getTokenCall = buildCall()
