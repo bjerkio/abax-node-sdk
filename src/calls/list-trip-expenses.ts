@@ -3,29 +3,29 @@ import type { QueryEnvelope } from '../common/types.js';
 
 export type ListTripExpensesInput = QueryEnvelope<{
   /** Ids of trips. Can have up to 150 ids */
-  tripIds: string[];
+  trip_ids: string[];
 }>;
 
 const expenseSchema = z.object({
   parking: z.number().optional(),
-  easyParkPrivate: z.number().optional(),
-  easyParkCorporate: z.number().optional(),
-  tollRoadAdmin: z.number().optional(),
-  tollCharge: z.number().optional(),
+  easy_park_private: z.number().optional(),
+  easy_park_corporate: z.number().optional(),
+  toll_road_admin: z.number().optional(),
+  toll_charge: z.number().optional(),
   ferry: z.number().optional(),
 });
 
 export type Expense = z.infer<typeof expenseSchema>;
 
 const extraSchema = z.object({
-  distanceWithBadRoadInKm: z.number().optional(),
-  distanceWithTrailerInKm: z.number().optional(),
-  distanceWithCaravanInKm: z.number().optional(),
-  distanceWithCanteenInKm: z.number().optional(),
-  distanceWithHeavyLoadInKm: z.number().optional(),
-  distanceWithDogInKm: z.number().optional(),
-  distanceWithPassengerInKm: z.number().optional(),
-  passengerName: z.string().optional(),
+  distance_with_bad_road_in_km: z.number().optional(),
+  distance_with_trailer_in_km: z.number().optional(),
+  distance_with_caravan_in_km: z.number().optional(),
+  distance_with_canteen_in_km: z.number().optional(),
+  distance_with_heavy_load_in_km: z.number().optional(),
+  distance_with_dog_in_km: z.number().optional(),
+  distance_with_passenger_in_km: z.number().optional(),
+  passenger_name: z.string().optional(),
 });
 
 export type Extra = z.infer<typeof extraSchema>;
@@ -33,7 +33,7 @@ export type Extra = z.infer<typeof extraSchema>;
 export const listTripExpensesSchema = z.object({
   items: z.array(
     z.object({
-      tripId: z.string(),
+      trip_id: z.string(),
 
       expense: expenseSchema,
 

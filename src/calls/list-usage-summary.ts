@@ -2,13 +2,13 @@ import { z } from 'zod';
 
 export interface ListUsageSummaryInput {
   // the id of the vehicle
-  vehicleId?: string;
+  vehicle_id?: string;
 
   /** The period cannot be longer than 3 months */
-  dateFrom: Date;
+  date_from: Date;
 
   /** The period cannot be longer than 3 months */
-  dateTo: Date;
+  date_to: Date;
 }
 
 export const listUsageSummaryResponseSchema = z.object({

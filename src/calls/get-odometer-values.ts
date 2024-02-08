@@ -3,7 +3,7 @@ import type { QueryEnvelope } from '../common/types.js';
 
 export type GetOdometerValuesOfTripsInput = QueryEnvelope<{
   /** Ids of trips. */
-  tripIds: string[];
+  trip_ids: string[];
 }>;
 
 const odometerReadingSchema = z.object({
@@ -12,9 +12,9 @@ const odometerReadingSchema = z.object({
 });
 
 const odometerValuesSchema = z.object({
-  tripId: z.string(),
-  tripStart: odometerReadingSchema.optional(),
-  tripFinish: odometerReadingSchema.optional(),
+  trip_id: z.string(),
+  trip_start: odometerReadingSchema.optional(),
+  trip_finish: odometerReadingSchema.optional(),
 });
 
 export const getOdometerValuesOfTripsResponseSchema = z.object({

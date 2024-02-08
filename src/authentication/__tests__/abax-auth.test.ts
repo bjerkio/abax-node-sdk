@@ -41,11 +41,11 @@ describe('abax auth', async () => {
         method: 'POST',
       })
       .reply(200, {
-        accessToken: 'access_token',
-        expiresIn: 3600,
-        idToken: 'id_token',
-        tokenType: 'Bearer',
-        refreshToken: 'refresh_token',
+        access_token: 'access_token',
+        expires_in: 3600,
+        id_token: 'id_token',
+        token_type: 'Bearer',
+        refresh_token: 'refresh_token',
       });
 
     const date = new Date(2000, 1, 1, 13);
@@ -61,7 +61,7 @@ describe('abax auth', async () => {
     expect(credentials).toMatchInlineSnapshot(`
       {
         "accessToken": "access_token",
-        "expiresAt": 2000-02-01T14:00:00.000Z,
+        "expiresAt": 2000-02-01T13:00:00.000Z,
         "idToken": "id_token",
         "refreshToken": "refresh_token",
         "tokenType": "Bearer",
@@ -96,11 +96,11 @@ describe('abax auth', async () => {
         method: 'POST',
       })
       .reply(200, {
-        accessToken: 'new_access_token',
-        expiresIn: 3600,
-        idToken: 'id_token',
-        tokenType: 'Bearer',
-        refreshToken: 'new_refresh_token',
+        access_token: 'new_access_token',
+        expires_in: 3600,
+        id_token: 'id_token',
+        token_type: 'Bearer',
+        refresh_token: 'new_refresh_token',
       });
 
     const token = await auth.getAccessToken();
@@ -109,7 +109,7 @@ describe('abax auth', async () => {
     expect(auth.getCredentials()).toMatchInlineSnapshot(`
       {
         "accessToken": "new_access_token",
-        "expiresAt": 2000-02-01T14:00:00.000Z,
+        "expiresAt": 2000-02-01T13:00:00.000Z,
         "idToken": "id_token",
         "refreshToken": "new_refresh_token",
         "tokenType": "Bearer",

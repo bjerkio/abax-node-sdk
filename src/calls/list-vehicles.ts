@@ -5,7 +5,7 @@ import { driverSchema, vehicleCommercialClassSchema } from './shared.js';
 export type ListVehiclesInput = QueryEnvelope<
   | {
       page: number;
-      pageSize: number;
+      page_size: number;
     }
   | undefined
 >;
@@ -16,12 +16,12 @@ const modelSchema = z.object({ name: z.string() });
 
 const licensePlateSchema = z.object({
   number: z.string(),
-  registrationDate: z.string().optional(),
+  registration_date: z.string().optional(),
 });
 
 const vehicleUnitSchema = z.object({
   id: z.string(),
-  serialNumber: z.string().optional(),
+  serial_number: z.string().optional(),
   type: z.string(),
   health: z.enum(['Unknown', 'Healthy', 'Degraded', 'Unhealthy']),
   status: z.enum(['Unknown', 'Active', 'Deactivated']),
@@ -31,11 +31,11 @@ const locationSchema = z.object({
   latitude: z.number(),
   longitude: z.number(),
   speed: z.number().optional(),
-  inMovement: z.boolean().optional(),
+  in_movement: z.boolean().optional(),
   course: z.number().optional(),
   timestamp: z.string(),
-  signalSource: z.enum(['Gps', 'Gsm']),
-  accuracyRadius: z.number().optional(),
+  signal_source: z.enum(['Gps', 'Gsm']),
+  accuracy_radius: z.number().optional(),
 });
 
 export const vehicleSchema = z.object({
@@ -44,9 +44,9 @@ export const vehicleSchema = z.object({
   alias: z.string().optional(),
   manufacturer: manufacturerSchema.optional(),
   model: modelSchema.optional(),
-  licensePlate: licensePlateSchema.optional(),
-  commercialClass: vehicleCommercialClassSchema,
-  registeredAt: z.string().optional(),
+  license_plate: licensePlateSchema.optional(),
+  commercial_class: vehicleCommercialClassSchema,
+  registered_at: z.string().optional(),
   unit: vehicleUnitSchema.optional(),
   location: locationSchema.optional(),
   driver: driverSchema.optional(),
@@ -64,7 +64,7 @@ export const vehicleSchema = z.object({
       timestamp: z.string().optional(),
     })
     .optional(),
-  fuelType: z.enum([
+  fuel_type: z.enum([
     'Unknown',
     'Petrol',
     'Electricity',
@@ -74,14 +74,14 @@ export const vehicleSchema = z.object({
     'PetrolHybrid',
   ]),
 
-  engineSize: z.number().optional(),
+  engine_size: z.number().optional(),
   color: z.string().optional(),
-  co2Emissions: z.number().optional(),
+  co2_emissions: z.number().optional(),
 });
 
 export const listVehiclesResponseSchema = z.object({
   page: z.number(),
-  pageSize: z.number(),
+  page_size: z.number(),
   items: z.array(vehicleSchema),
 });
 
