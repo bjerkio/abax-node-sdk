@@ -15,10 +15,10 @@ describe('decode-abax.profile.ts', () => {
       exp: 123,
       aud: 'hello',
       amr: ['hello'],
-      atHash: '123abc',
+      at_hash: '123abc',
       sid: '123EF',
       sub: '123',
-      authTime: 123,
+      auth_time: 123,
       idp: 'local',
       'http://schemas.abax.no/identity/claims/username': 'hello@example.com',
       role: 'Administrator',
@@ -27,8 +27,8 @@ describe('decode-abax.profile.ts', () => {
       'http://schemas.abax.no/identity/claims/organizationid': '123',
       'http://schemas.abax.no/identity/claims/countrycode': 'NO',
       email: 'hello@example.com',
-      emailVerified: true,
-      phoneNumber: '+4799999999',
+      email_verified: true,
+      phone_number: '+4799999999',
       'http://schemas.abax.no/identity/claims/securitystamp': '123abc',
     });
   });

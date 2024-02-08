@@ -8,10 +8,10 @@ export const abaxIdTokenPayload = z.object({
   exp: z.number(),
   aud: z.string(),
   amr: z.array(z.string()),
-  atHash: z.string(),
+  at_hash: z.string(),
   sid: z.string(),
   sub: z.string(),
-  authTime: z.number(),
+  auth_time: z.number(),
   idp: z.string(),
   'http://schemas.abax.no/identity/claims/username': z.string(),
   role: z.string(),
@@ -20,8 +20,8 @@ export const abaxIdTokenPayload = z.object({
   'http://schemas.abax.no/identity/claims/organizationid': z.string(),
   'http://schemas.abax.no/identity/claims/countrycode': z.string(),
   email: z.string(),
-  emailVerified: z.boolean(),
-  phoneNumber: z.string().optional(),
+  email_verified: z.boolean(),
+  phone_number: z.string().optional(),
   'http://schemas.abax.no/identity/claims/securitystamp': z.string(),
 });
 
