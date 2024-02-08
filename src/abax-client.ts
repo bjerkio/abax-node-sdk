@@ -231,22 +231,24 @@ export class AbaxClient {
       .args<{ input: ListEquipmentInput }>()
       .method('get')
       .path('/v2/equipment/')
-      .query(({ input: { page, pageSize: pageSize, unitTypes: unitTypes } }) => {
-        const queryParams = new URLSearchParams();
+      .query(
+        ({ input: { page, pageSize: pageSize, unitTypes: unitTypes } }) => {
+          const queryParams = new URLSearchParams();
 
-        if (page) {
-          queryParams.append('page', String(page));
-        }
-        if (pageSize) {
-          queryParams.append('page_size', String(pageSize));
-        }
+          if (page) {
+            queryParams.append('page', String(page));
+          }
+          if (pageSize) {
+            queryParams.append('page_size', String(pageSize));
+          }
 
-        if (unitTypes) {
-          queryParams.append('unit_types', String(unitTypes));
-        }
+          if (unitTypes) {
+            queryParams.append('unit_types', String(unitTypes));
+          }
 
-        return queryParams;
-      })
+          return queryParams;
+        },
+      )
       .parseJson(withZod(listEquipmentResponse))
       .build();
 
@@ -261,28 +263,37 @@ export class AbaxClient {
       .args<{ input: ListEquipmentLogsInput }>()
       .method('get')
       .path('/v2/equipment/usage-log')
-      .query(({ input: { page, pageSize: pageSize, dateFrom: dateFrom, dateTo: dateTo } }) => {
-        const queryParams = new URLSearchParams();
+      .query(
+        ({
+          input: {
+            page,
+            pageSize: pageSize,
+            dateFrom: dateFrom,
+            dateTo: dateTo,
+          },
+        }) => {
+          const queryParams = new URLSearchParams();
 
-        queryParams.append(
-          'date_from',
-          format(dateFrom, "yyyy-MM-dd'T'HH:mm:ssxxx"),
-        );
+          queryParams.append(
+            'date_from',
+            format(dateFrom, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+          );
 
-        queryParams.append(
-          'date_to',
-          format(dateTo, "yyyy-MM-dd'T'HH:mm:ssxxx"),
-        );
+          queryParams.append(
+            'date_to',
+            format(dateTo, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+          );
 
-        if (page) {
-          queryParams.append('page', String(page));
-        }
-        if (pageSize) {
-          queryParams.append('page_size', String(pageSize));
-        }
+          if (page) {
+            queryParams.append('page', String(page));
+          }
+          if (pageSize) {
+            queryParams.append('page_size', String(pageSize));
+          }
 
-        return queryParams;
-      })
+          return queryParams;
+        },
+      )
       .parseJson(withZod(listEquipmentLogsResponseSchema))
       .build();
 
