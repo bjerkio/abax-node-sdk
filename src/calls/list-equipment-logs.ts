@@ -27,6 +27,8 @@ const equipmentLogSchema = z.object({
   startTime: data.start_time,
   endTime: data.end_time,
   inputType: data.input_type,
+  usage: data.usage,
+  address: data.address
 }))
 
 export const listEquipmentLogsResponseSchema = z.object({
@@ -34,7 +36,9 @@ export const listEquipmentLogsResponseSchema = z.object({
   page_size: z.number(),
   items: z.array(equipmentLogSchema),
 }).transform(data => ({
-  pageSize: data.page_size
+  pageSize: data.page_size,
+  page: data.page,
+  items: data.items
 }))
 
 export type EquipmentLog = z.infer<typeof equipmentLogSchema>;

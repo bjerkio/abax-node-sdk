@@ -55,8 +55,9 @@ const tripSchema = z.object({
   notes: z.string().optional(),
   duration: z.number().optional(),
   source: z.enum(['Automatic', 'Manual']),
-}).transform(data => ({
-  commercialClass: data.commercial_class,
+}).transform(({commercial_class ,...data}) => ({
+  ...data,
+  commercialClass: commercial_class,
 
 }))
 
@@ -67,7 +68,9 @@ export const listTripsResponseSchema = z.object({
   page_size: z.number(),
   items: z.array(tripSchema),
 }).transform(data => ({
-  pageSize: data.page_size
+  pageSize: data.page_size,
+  page: data.page,
+  items: data.items
 }))
 
 export type ListTripsResponse = z.infer<typeof listTripsResponseSchema>;

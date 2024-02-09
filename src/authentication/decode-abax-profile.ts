@@ -23,11 +23,24 @@ export const abaxIdTokenPayload = z.object({
   email_verified: z.boolean(),
   phone_number: z.string().optional(),
   'http://schemas.abax.no/identity/claims/securitystamp': z.string(),
-}).transform(data => ({
-  atHash: data.at_hash,
-  authTime: data.auth_time,
-  emailVerified: data.email_verified,
-  phoneNumber: data.phone_number,
+}).transform(({ at_hash, 
+  auth_time, 
+  email_verified, 
+  phone_number, 
+  'http://schemas.abax.no/identity/claims/username': username,
+  'http://schemas.abax.no/identity/claims/organizationid': organizationId, 
+  'http://schemas.abax.no/identity/claims/countrycode': countryCode,
+  'http://schemas.abax.no/identity/claims/securitystamp': securityStamp,
+  ...data }) => ({
+  ...data,
+  username,
+  organizationId,
+  countryCode,
+  securityStamp,
+  atHash: at_hash,
+  authTime: auth_time,
+  emailVerified: email_verified,
+  phoneNumber: phone_number,
 })
 )
 

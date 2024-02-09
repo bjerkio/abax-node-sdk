@@ -8,7 +8,10 @@ export const driverSchema = z.object({
   email: z.string().optional(),
 }).transform(data => ({
   externalId: data.external_id,
-  phoneNumber: data.phone_number
+  phoneNumber: data.phone_number,
+  email: data.email,
+  id: data.id,
+  name: data.name
 }))
 
 export const vehicleCommercialClassSchema = z.enum([

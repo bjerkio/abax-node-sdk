@@ -85,13 +85,13 @@ export const vehicleSchema = z.object({
   engine_size: z.number().optional(),
   color: z.string().optional(),
   co2_emissions: z.number().optional(),
-}).transform(data => ({
-  licensePlate: data.license_plate,
-  commercialClass: data.commercial_class,
-  registeredAt: data.registered_at,
-  fuelType: data.fuel_type,
-  engineSize: data.engine_size,
-  co2Emissions: data.co2_emissions,
+}).transform(({license_plate, commercial_class, registered_at, fuel_type, engine_size, co2_emissions, ...data}) => ({
+  licensePlate: license_plate,
+  commercialClass: commercial_class,
+  registeredAt: registered_at,
+  fuelType: fuel_type,
+  engineSize: engine_size,
+  co2Emissions: co2_emissions,
 }))
 
 export const listVehiclesResponseSchema = z.object({
@@ -99,7 +99,9 @@ export const listVehiclesResponseSchema = z.object({
   page_size: z.number(),
   items: z.array(vehicleSchema),
 }).transform(data => ({
-  pageSize: data.page_size
+  pageSize: data.page_size,
+  page: data.page,
+  items: data.items
 }))
 
 export type Vehicle = z.infer<typeof vehicleSchema>;

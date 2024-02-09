@@ -18,7 +18,9 @@ export const listEquipmentResponse = z.object({
   page_size: z.number(),
   items: z.array(equipmentSchema),
 }).transform(data => ({
-  pageSize: data.page_size
+  pageSize: data.page_size,
+  page: data.page,
+  items: data.items
 }))
 
 export type ListEquipmentResponse = z.infer<typeof listEquipmentResponse>;
