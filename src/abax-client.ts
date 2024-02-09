@@ -267,9 +267,9 @@ export class AbaxClient {
         ({
           input: {
             page,
-            pageSize: pageSize,
-            dateFrom: dateFrom,
-            dateTo: dateTo,
+            pageSize,
+            dateFrom,
+            dateTo,
           },
         }) => {
           const queryParams = new URLSearchParams();
