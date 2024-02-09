@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'vitest';
 import { initialiseClientAndMockPool } from '../../test-utils';
-import { describe, it, expect } from 'vitest';
 
 describe('get-equipment', () => {
   it('should return equipment', async () => {
