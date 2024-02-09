@@ -1,4 +1,4 @@
-import { MockAgent, type Interceptable, setGlobalDispatcher } from 'undici';
+import { type Interceptable, MockAgent, setGlobalDispatcher } from 'undici';
 import { AbaxClient } from './abax-client';
 
 export function initialiseClientAndMockPool(): {
