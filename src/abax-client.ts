@@ -125,7 +125,7 @@ export class AbaxClient {
       .args<{ input: ListUsageSummaryInput }>()
       .method('get')
       .path(
-        ({ input: { vehicleId: vehicleId } }) =>
+        ({ input: { vehicleId } }) =>
           `/v1/vehicles/${vehicleId}/usage-summary`,
       )
       .query(({ input }) => {
