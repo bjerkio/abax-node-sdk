@@ -353,7 +353,7 @@ export class AbaxClient {
       .query(
         ({
           input: {
-            query: { tripIds: tripIds },
+            query: { tripIds },
           },
         }) => {
           const params = new URLSearchParams();
