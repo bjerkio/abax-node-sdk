@@ -232,7 +232,7 @@ export class AbaxClient {
       .method('get')
       .path('/v2/equipment/')
       .query(
-        ({ input: { page, page_size: pageSize, unit_types: unitTypes } }) => {
+        ({ input: { page, pageSize: pageSize, unitTypes: unitTypes } }) => {
           const queryParams = new URLSearchParams();
 
           if (page) {

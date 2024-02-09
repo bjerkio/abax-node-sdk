@@ -12,7 +12,7 @@ describe('abax-client', () => {
   it.skip('should list equipment', async () => {
     const client = await initialiseClient();
 
-    const result = await client.listEquipment({ page: 1, page_size: 2 });
+    const result = await client.listEquipment({ page: 1, pageSize: 2 });
 
     expect(result).toMatchSnapshot();
   });

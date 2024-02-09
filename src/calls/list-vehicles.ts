@@ -5,7 +5,7 @@ import { driverSchema, vehicleCommercialClassSchema } from './shared.js';
 export type ListVehiclesInput = QueryEnvelope<
   | {
       page: number;
-      page_size: number;
+      pageSize: number;
     }
   | undefined
 >;
@@ -17,7 +17,9 @@ const modelSchema = z.object({ name: z.string() });
 const licensePlateSchema = z.object({
   number: z.string(),
   registration_date: z.string().optional(),
-});
+}).transform(data => ({
+  registrationDate: data.registration_date
+}))
 
 const vehicleUnitSchema = z.object({
   id: z.string(),
@@ -25,7 +27,9 @@ const vehicleUnitSchema = z.object({
   type: z.string(),
   health: z.enum(['Unknown', 'Healthy', 'Degraded', 'Unhealthy']),
   status: z.enum(['Unknown', 'Active', 'Deactivated']),
-});
+}).transform(data => ({
+  serialNumber: data.serial_number
+}))
 
 const locationSchema = z.object({
   latitude: z.number(),
@@ -36,7 +40,11 @@ const locationSchema = z.object({
   timestamp: z.string(),
   signal_source: z.enum(['Gps', 'Gsm']),
   accuracy_radius: z.number().optional(),
-});
+}).transform(data => ({
+  inMovement: data.in_movement,
+  signalSource: data.signal_source,
+  accuracyRadius: data.accuracy_radius
+}))
 
 export const vehicleSchema = z.object({
   id: z.string(),
@@ -77,13 +85,22 @@ export const vehicleSchema = z.object({
   engine_size: z.number().optional(),
   color: z.string().optional(),
   co2_emissions: z.number().optional(),
-});
+}).transform(data => ({
+  licensePlate: data.license_plate,
+  commercialClass: data.commercial_class,
+  registeredAt: data.registered_at,
+  fuelType: data.fuel_type,
+  engineSize: data.engine_size,
+  co2Emissions: data.co2_emissions,
+}))
 
 export const listVehiclesResponseSchema = z.object({
   page: z.number(),
   page_size: z.number(),
   items: z.array(vehicleSchema),
-});
+}).transform(data => ({
+  pageSize: data.page_size
+}))
 
 export type Vehicle = z.infer<typeof vehicleSchema>;
 

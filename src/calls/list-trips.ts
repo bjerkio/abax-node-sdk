@@ -7,15 +7,15 @@ export type ListTripsInput = QueryEnvelope<{
   page?: number;
 
   /** Defaults to 1500 */
-  page_size?: number;
+  pageSize?: number;
 
   /** The period cannot be longer than 3 months */
-  date_from: Date;
+  dateFrom: Date;
 
   /** The period cannot be longer than 3 months */
-  date_to: Date;
+  dateTo: Date;
 
-  vehicle_id?: string;
+  vehicleId?: string;
 }>;
 
 const locationPointSchema = z.object({
@@ -24,7 +24,10 @@ const locationPointSchema = z.object({
   timestamp: z.string(),
   signal_source: z.any(),
   accuracy_radius: z.number().optional(),
-});
+}).transform(data => ({
+  signalSource: data.signal_source,
+  accuracyRadius: data.accuracy_radius
+}))
 
 const tripPointSchema = z.object({
   location: locationPointSchema,
@@ -52,7 +55,10 @@ const tripSchema = z.object({
   notes: z.string().optional(),
   duration: z.number().optional(),
   source: z.enum(['Automatic', 'Manual']),
-});
+}).transform(data => ({
+  commercialClass: data.commercial_class,
+
+}))
 
 export type Trip = z.infer<typeof tripSchema>;
 
@@ -60,6 +66,8 @@ export const listTripsResponseSchema = z.object({
   page: z.number(),
   page_size: z.number(),
   items: z.array(tripSchema),
-});
+}).transform(data => ({
+  pageSize: data.page_size
+}))
 
 export type ListTripsResponse = z.infer<typeof listTripsResponseSchema>;

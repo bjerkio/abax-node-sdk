@@ -6,7 +6,9 @@ export interface GetEquipmentInput {
 const operatingHoursSchema = z.object({
   hours: z.number(),
   unit_driven: z.boolean(),
-});
+}).transform(data => ({
+  unitDriven: data.unit_driven
+}));
 
 export const equipmentSchema = z.object({
   id: z.string(),
@@ -51,7 +53,13 @@ export const equipmentSchema = z.object({
       timestamp: z.string(),
     })
     .optional(),
-});
+}).transform(data => ({
+  assetId: data.asset_id,
+  serialNumber: data.serial_number,
+  registeredAt: data.registered_at,
+  operatingHours: data.operating_hours,
+  initialOperatingHours: data.initial_operating_hours
+}))
 
 export type AbaxEquipment = z.infer<typeof equipmentSchema>;
 export type GetEquipmentResponse = AbaxEquipment;

@@ -6,17 +6,19 @@ export interface ListEquipmentInput {
   page?: number;
 
   /** Defaults to 1500 */
-  page_size?: number;
+  pageSize?: number;
 
   /** By default endpoint returns information about all unit types excluding Mini.
    * To get data about Minis, you have to explicitly provide "Mini" as a parameter (only Mini information will be returned) */
-  unit_types?: 'Mini';
+  unitTypes?: 'Mini';
 }
 
 export const listEquipmentResponse = z.object({
   page: z.number(),
   page_size: z.number(),
   items: z.array(equipmentSchema),
-});
+}).transform(data => ({
+  pageSize: data.page_size
+}))
 
 export type ListEquipmentResponse = z.infer<typeof listEquipmentResponse>;

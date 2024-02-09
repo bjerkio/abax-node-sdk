@@ -23,7 +23,13 @@ export const abaxIdTokenPayload = z.object({
   email_verified: z.boolean(),
   phone_number: z.string().optional(),
   'http://schemas.abax.no/identity/claims/securitystamp': z.string(),
-});
+}).transform(data => ({
+  atHash: data.at_hash,
+  authTime: data.auth_time,
+  emailVerified: data.email_verified,
+  phoneNumber: data.phone_number,
+})
+)
 
 export type AbaxIdTokenPayload = z.infer<typeof abaxIdTokenPayload>;
 
