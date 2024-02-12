@@ -89,6 +89,7 @@ export const vehicleSchema = z.object({
   color: z.string().optional(),
   co2_emissions: z.number().optional(),
 }).transform(({license_plate, commercial_class, registered_at, fuel_type, engine_size, co2_emissions, ...data}) => ({
+  ...data,
   licensePlate: license_plate,
   commercialClass: commercial_class,
   registeredAt: registered_at,
