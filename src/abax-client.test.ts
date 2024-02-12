@@ -79,7 +79,7 @@ describe('abax-client', () => {
         statusCode: 200,
         data: {
           page: 1,
-          pageSize: 150,
+          page_size: 150,
           items: [],
         },
       }))
