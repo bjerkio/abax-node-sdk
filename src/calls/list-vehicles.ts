@@ -18,6 +18,7 @@ const licensePlateSchema = z.object({
   number: z.string(),
   registration_date: z.string().optional(),
 }).transform(data => ({
+  number: data.number, 
   registrationDate: data.registration_date
 }))
 
