@@ -5,29 +5,45 @@ export interface ListEquipmentLogsInput {
   page?: number;
 
   /** Defaults to 1500 */
-  page_size?: number;
+  pageSize?: number;
 
   /** The period cannot be longer than 3 months */
-  date_from: Date;
+  dateFrom: Date;
 
   /** The period cannot be longer than 3 months */
-  date_to: Date;
+  dateTo: Date;
 }
-const equipmentLogSchema = z.object({
-  equipment_id: z.string(),
-  usage_log_id: z.number(),
-  address: z.string(),
-  start_time: z.string(),
-  end_time: z.string(),
-  input_type: z.enum(['Yellow', 'White', 'Blue']),
-  usage: z.number(),
-});
+const equipmentLogSchema = z
+  .object({
+    equipment_id: z.string(),
+    usage_log_id: z.number(),
+    address: z.string(),
+    start_time: z.string(),
+    end_time: z.string(),
+    input_type: z.enum(['Yellow', 'White', 'Blue']),
+    usage: z.number(),
+  })
+  .transform(data => ({
+    equipmentId: data.equipment_id,
+    usageLogId: data.usage_log_id,
+    startTime: data.start_time,
+    endTime: data.end_time,
+    inputType: data.input_type,
+    usage: data.usage,
+    address: data.address,
+  }));
 
-export const listEquipmentLogsResponseSchema = z.object({
-  page: z.number(),
-  page_size: z.number(),
-  items: z.array(equipmentLogSchema),
-});
+export const listEquipmentLogsResponseSchema = z
+  .object({
+    page: z.number(),
+    page_size: z.number(),
+    items: z.array(equipmentLogSchema),
+  })
+  .transform(data => ({
+    pageSize: data.page_size,
+    page: data.page,
+    items: data.items,
+  }));
 
 export type EquipmentLog = z.infer<typeof equipmentLogSchema>;
 export type ListEquipmentLogsResponse = z.infer<
