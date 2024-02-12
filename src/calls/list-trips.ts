@@ -23,7 +23,7 @@ const locationPointSchema = z
     latitude: z.number(),
     longitude: z.number(),
     timestamp: z.string(),
-    signal_source: z.enum(['Gps', 'Gsm']),   
+    signal_source: z.enum(['Gps', 'Gsm']),
     accuracy_radius: z.number().optional(),
   })
   .transform(({ signal_source, accuracy_radius, ...data }) => ({
