@@ -41,7 +41,7 @@ describe('get odometer values', () => {
       })
       .times(1);
 
-    const odometerValues = client.getOdometerValuesOfTrips({
+    const odometerValues = await client.getOdometerValuesOfTrips({
       query: {
         trip_ids: [
           '871c120e54cb4c58b4fb5ee457bb968a',
