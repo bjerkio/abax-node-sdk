@@ -42,7 +42,8 @@ const locationSchema = z.object({
   timestamp: z.string(),
   signal_source: z.enum(['Gps', 'Gsm']),
   accuracy_radius: z.number().optional(),
-}).transform(data => ({
+}).transform(({ in_movement, signal_source, accuracy_radius, ...data => ({
+  ...data,
   inMovement: data.in_movement,
   signalSource: data.signal_source,
   accuracyRadius: data.accuracy_radius
