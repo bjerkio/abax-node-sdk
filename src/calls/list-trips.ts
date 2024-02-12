@@ -24,9 +24,10 @@ const locationPointSchema = z.object({
   timestamp: z.string(),
   signal_source: z.any(),
   accuracy_radius: z.number().optional(),
-}).transform(data => ({
-  signalSource: data.signal_source,
-  accuracyRadius: data.accuracy_radius
+}).transform(({ signal_source, accuracy_radius, ...data }) => ({
+  ...data,
+  signalSource: signal_source,
+  accuracyRadius: accuracy_radius
 }))
 
 const tripPointSchema = z.object({
