@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`get odometer values > should get odometer values 1`] = `Promise {}`;
