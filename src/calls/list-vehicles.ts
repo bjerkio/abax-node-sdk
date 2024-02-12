@@ -28,8 +28,9 @@ const vehicleUnitSchema = z.object({
   type: z.string(),
   health: z.enum(['Unknown', 'Healthy', 'Degraded', 'Unhealthy']),
   status: z.enum(['Unknown', 'Active', 'Deactivated']),
-}).transform(data => ({
-  serialNumber: data.serial_number
+}).transform(({ serial_number, ...data }) => ({
+  ...data,
+  serialNumber: serial_number
 }))
 
 const locationSchema = z.object({
