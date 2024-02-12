@@ -125,8 +125,7 @@ export class AbaxClient {
       .args<{ input: ListUsageSummaryInput }>()
       .method('get')
       .path(
-        ({ input: { vehicleId } }) =>
-          `/v1/vehicles/${vehicleId}/usage-summary`,
+        ({ input: { vehicleId } }) => `/v1/vehicles/${vehicleId}/usage-summary`,
       )
       .query(({ input }) => {
         const queryParams = new URLSearchParams();
@@ -263,37 +262,28 @@ export class AbaxClient {
       .args<{ input: ListEquipmentLogsInput }>()
       .method('get')
       .path('/v2/equipment/usage-log')
-      .query(
-        ({
-          input: {
-            page,
-            pageSize,
-            dateFrom,
-            dateTo,
-          },
-        }) => {
-          const queryParams = new URLSearchParams();
+      .query(({ input: { page, pageSize, dateFrom, dateTo } }) => {
+        const queryParams = new URLSearchParams();
 
-          queryParams.append(
-            'date_from',
-            format(dateFrom, "yyyy-MM-dd'T'HH:mm:ssxxx"),
-          );
+        queryParams.append(
+          'date_from',
+          format(dateFrom, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+        );
 
-          queryParams.append(
-            'date_to',
-            format(dateTo, "yyyy-MM-dd'T'HH:mm:ssxxx"),
-          );
+        queryParams.append(
+          'date_to',
+          format(dateTo, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+        );
 
-          if (page) {
-            queryParams.append('page', String(page));
-          }
-          if (pageSize) {
-            queryParams.append('page_size', String(pageSize));
-          }
+        if (page) {
+          queryParams.append('page', String(page));
+        }
+        if (pageSize) {
+          queryParams.append('page_size', String(pageSize));
+        }
 
-          return queryParams;
-        },
-      )
+        return queryParams;
+      })
       .parseJson(withZod(listEquipmentLogsResponseSchema))
       .build();
 

@@ -13,14 +13,16 @@ export interface ListEquipmentInput {
   unitTypes?: 'Mini';
 }
 
-export const listEquipmentResponse = z.object({
-  page: z.number(),
-  page_size: z.number(),
-  items: z.array(equipmentSchema),
-}).transform(data => ({
-  pageSize: data.page_size,
-  page: data.page,
-  items: data.items
-}))
+export const listEquipmentResponse = z
+  .object({
+    page: z.number(),
+    page_size: z.number(),
+    items: z.array(equipmentSchema),
+  })
+  .transform(data => ({
+    pageSize: data.page_size,
+    page: data.page,
+    items: data.items,
+  }));
 
 export type ListEquipmentResponse = z.infer<typeof listEquipmentResponse>;

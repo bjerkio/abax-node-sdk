@@ -18,60 +18,65 @@ export type ListTripsInput = QueryEnvelope<{
   vehicleId?: string;
 }>;
 
-const locationPointSchema = z.object({
-  latitude: z.number(),
-  longitude: z.number(),
-  timestamp: z.string(),
-  signal_source: z.any(),
-  accuracy_radius: z.number().optional(),
-}).transform(({ signal_source, accuracy_radius, ...data }) => ({
-  ...data,
-  signalSource: signal_source,
-  accuracyRadius: accuracy_radius
-}))
+const locationPointSchema = z
+  .object({
+    latitude: z.number(),
+    longitude: z.number(),
+    timestamp: z.string(),
+    signal_source: z.enum(['Gps', 'Gsm']),   
+    accuracy_radius: z.number().optional(),
+  })
+  .transform(({ signal_source, accuracy_radius, ...data }) => ({
+    ...data,
+    signalSource: signal_source,
+    accuracyRadius: accuracy_radius,
+  }));
 
 const tripPointSchema = z.object({
   location: locationPointSchema,
   address: z.string().optional(),
 });
 
-const tripSchema = z.object({
-  id: z.string(),
-  vehicle: z.object({
+const tripSchema = z
+  .object({
     id: z.string(),
-    alias: z.string().optional(),
-    commercial_class: vehicleCommercialClassSchema,
-  }),
-  driver: driverSchema.optional(),
-  start: tripPointSchema,
-  finish: tripPointSchema,
-  distance: z.number().optional(),
-  purpose: z.string().optional(),
-  commercial_class: z.enum([
-    'Unknown',
-    'PrivateTrip',
-    'BusinessTrip',
-    'Commute',
-  ]),
-  notes: z.string().optional(),
-  duration: z.number().optional(),
-  source: z.enum(['Automatic', 'Manual']),
-}).transform(({commercial_class ,...data}) => ({
-  ...data,
-  commercialClass: commercial_class,
-
-}))
+    vehicle: z.object({
+      id: z.string(),
+      alias: z.string().optional(),
+      commercial_class: vehicleCommercialClassSchema,
+    }),
+    driver: driverSchema.optional(),
+    start: tripPointSchema,
+    finish: tripPointSchema,
+    distance: z.number().optional(),
+    purpose: z.string().optional(),
+    commercial_class: z.enum([
+      'Unknown',
+      'PrivateTrip',
+      'BusinessTrip',
+      'Commute',
+    ]),
+    notes: z.string().optional(),
+    duration: z.number().optional(),
+    source: z.enum(['Automatic', 'Manual']),
+  })
+  .transform(({ commercial_class, ...data }) => ({
+    ...data,
+    commercialClass: commercial_class,
+  }));
 
 export type Trip = z.infer<typeof tripSchema>;
 
-export const listTripsResponseSchema = z.object({
-  page: z.number(),
-  page_size: z.number(),
-  items: z.array(tripSchema),
-}).transform(data => ({
-  pageSize: data.page_size,
-  page: data.page,
-  items: data.items
-}))
+export const listTripsResponseSchema = z
+  .object({
+    page: z.number(),
+    page_size: z.number(),
+    items: z.array(tripSchema),
+  })
+  .transform(data => ({
+    pageSize: data.page_size,
+    page: data.page,
+    items: data.items,
+  }));
 
 export type ListTripsResponse = z.infer<typeof listTripsResponseSchema>;
