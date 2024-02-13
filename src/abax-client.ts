@@ -357,6 +357,10 @@ export class AbaxClient {
   }
 
   private makeApiUrl() {
+    if (this.config.baseUrl) {
+      return this.config.baseUrl;
+    }
+
     if (this.config.environment === 'production' || !this.config.environment) {
       return apiUrls.production;
     }
