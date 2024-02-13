@@ -12,13 +12,15 @@ export interface ListUsageSummaryInput {
 }
 
 export const listUsageSummaryResponseSchema = z.object({
-  PrivateUsage: z.object({
-    DistanceDrivenInMeter: z.number(),
-    TotalTollStationsPassed: z.number(),
+  private_usage_summary: z.object({
+    distance_driven_in_meters: z.number(),
+    total_toll_stations_passed: z.number(),
+    total_road_toll_cost: z.number(),
   }),
-  CorporateUsageSummary: z.object({
-    DistanceDrivenInMeter: z.number(),
-    TotalTollStationsPassed: z.number(),
+  corporate_usage_summary: z.object({
+    distance_driven_in_meters: z.number(),
+    total_toll_stations_passed: z.number(),
+    total_road_toll_cost: z.number(),
   }),
 });
 
