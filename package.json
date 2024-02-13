@@ -15,8 +15,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "vitest **/*.test.ts",
-    "test:all": "TZ=UTC vitest",
+    "test": "TZ=UTC vitest",
     "test:e2e": "TZ=UTC vitest **/*.spec.ts",
     "test:ui": "TZ=UTC vitest --ui"
   },
