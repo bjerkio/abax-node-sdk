@@ -12,6 +12,11 @@ import {
   getOdometerValuesOfTripsResponseSchema,
 } from './calls/get-odometer-values.js';
 import {
+  type GetUsageSummaryInput,
+  type GetUsageSummaryResponse,
+  getUsageSummaryResponseSchema,
+} from './calls/get-usage-summary.js';
+import {
   type ListCapabilitiesResponse,
   listCapabilitiesResponseSchema,
 } from './calls/list-capabilities.js';
@@ -35,11 +40,6 @@ import {
   type ListTripsResponse,
   listTripsResponseSchema,
 } from './calls/list-trips.js';
-import {
-  type ListUsageSummaryInput,
-  type ListUsageSummaryResponse,
-  listUsageSummaryResponseSchema,
-} from './calls/list-usage-summary.js';
 import {
   type ListVehiclesInput,
   type ListVehiclesResponse,
@@ -118,11 +118,11 @@ export class AbaxClient {
   }
 
   listUsageSummary(
-    input: ListUsageSummaryInput,
-  ): Promise<ListUsageSummaryResponse> {
+    input: GetUsageSummaryInput,
+  ): Promise<GetUsageSummaryResponse> {
     // URL: /v1/vehicles/{vehicle-id}/usage-summary?from=<datetime>&to=<datetime>
     const call = this.authenticatedCall()
-      .args<{ input: ListUsageSummaryInput }>()
+      .args<{ input: GetUsageSummaryInput }>()
       .method('get')
       .path(
         ({ input: { vehicle_id } }) =>
@@ -134,7 +134,7 @@ export class AbaxClient {
         queryParams.append('to', format(input.date_to, 'yyyy-MM-dd'));
         return queryParams;
       })
-      .parseJson(withZod(listUsageSummaryResponseSchema))
+      .parseJson(withZod(getUsageSummaryResponseSchema))
       .build();
 
     return this.performRequest(apiKey => call({ input, apiKey }));

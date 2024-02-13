@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export interface ListUsageSummaryInput {
+export interface GetUsageSummaryInput {
   // the id of the vehicle
   vehicle_id?: string;
 
@@ -11,7 +11,7 @@ export interface ListUsageSummaryInput {
   date_to: Date;
 }
 
-export const listUsageSummaryResponseSchema = z.object({
+export const getUsageSummaryResponseSchema = z.object({
   private_usage_summary: z.object({
     distance_driven_in_meters: z.number(),
     total_toll_stations_passed: z.number(),
@@ -24,6 +24,6 @@ export const listUsageSummaryResponseSchema = z.object({
   }),
 });
 
-export type ListUsageSummaryResponse = z.infer<
-  typeof listUsageSummaryResponseSchema
+export type GetUsageSummaryResponse = z.infer<
+  typeof getUsageSummaryResponseSchema
 >;
