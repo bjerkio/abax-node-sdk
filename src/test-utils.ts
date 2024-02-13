@@ -12,9 +12,9 @@ export function initialiseClientAndMockPool(
   const mockAgent = new MockAgent();
 
   const mockPool = mockAgent.get('https://api.abax.cloud');
-  setGlobalDispatcher(mockAgent);
 
   if (baseUrl) {
+    setGlobalDispatcher(mockAgent);
     const client = new AbaxClient({
       baseUrl,
       apiKey: 'kanonball!',
@@ -24,7 +24,7 @@ export function initialiseClientAndMockPool(
   }
 
   mockAgent.disableNetConnect();
-
+  setGlobalDispatcher(mockAgent);
   const client = new AbaxClient({
     apiKey: 'kanonball!',
   });
