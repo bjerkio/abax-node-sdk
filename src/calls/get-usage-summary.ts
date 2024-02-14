@@ -19,7 +19,7 @@ const usage = z.object({
 
 export type Usage = z.infer<typeof usage>;
 
-const getUsageSummaryResponseSchema = z.object({
+export const getUsageSummaryResponseSchema = z.object({
   private_usage_summary: usage,
   corporate_usage_summary: usage,
 });
