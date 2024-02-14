@@ -14,7 +14,7 @@ import {
 import {
   type GetUsageSummaryInput,
   type GetUsageSummaryResponse,
-  getUsageSummaryResponseSchema,
+  usageSummarySchema,
 } from './calls/get-usage-summary.js';
 import {
   type ListCapabilitiesResponse,
@@ -134,7 +134,7 @@ export class AbaxClient {
         queryParams.append('to', format(input.date_to, 'yyyy-MM-dd'));
         return queryParams;
       })
-      .parseJson(withZod(getUsageSummaryResponseSchema))
+      .parseJson(withZod(usageSummarySchema))
       .build();
 
     return this.performRequest(apiKey => call({ input, apiKey }));
