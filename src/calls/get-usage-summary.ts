@@ -11,17 +11,17 @@ export interface GetUsageSummaryInput {
   date_to: Date;
 }
 
+const usage = z.object({
+  distance_driven_in_meters: z.number(),
+  total_toll_stations_passed: z.number(),
+  total_road_toll_cost: z.number(),
+});
+
+export type Usage = z.infer<typeof usage>;
+
 export const getUsageSummaryResponseSchema = z.object({
-  private_usage_summary: z.object({
-    distance_driven_in_meters: z.number(),
-    total_toll_stations_passed: z.number(),
-    total_road_toll_cost: z.number(),
-  }),
-  corporate_usage_summary: z.object({
-    distance_driven_in_meters: z.number(),
-    total_toll_stations_passed: z.number(),
-    total_road_toll_cost: z.number(),
-  }),
+  private_usage_summary: usage,
+  corporate_usage_summary: usage,
 });
 
 export type GetUsageSummaryResponse = z.infer<
