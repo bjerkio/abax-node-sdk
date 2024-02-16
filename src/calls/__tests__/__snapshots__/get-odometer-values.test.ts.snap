@@ -1,0 +1,33 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`get odometer values > should get odometer values 1`] = `
+{
+  "items": [
+    {
+      "trip_finish": {
+        "timestamp": "2019-01-10T11:33:12.000+00:00",
+        "value": 100134000,
+      },
+      "trip_id": "871c120e54cb4c58b4fb5ee457bb968a",
+      "trip_start": {
+        "timestamp": "2019-01-10T10:00:00.000+00:00",
+        "value": 100000000,
+      },
+    },
+    {
+      "trip_finish": {
+        "timestamp": "2019-01-10T11:33:12.000+00:00",
+        "value": 89000,
+      },
+      "trip_id": "0e2d0a84463e411dbedab16560b60430",
+      "trip_start": {
+        "timestamp": "2019-01-10T10:00:00.000+00:00",
+        "value": 83000,
+      },
+    },
+    {
+      "trip_id": "129769b3470354568ae6995e7b3c70f5",
+    },
+  ],
+}
+`;
