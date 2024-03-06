@@ -38,6 +38,7 @@ import {
 import {
   type ListTripsInput,
   type ListTripsResponse,
+  type Trip,
   listTripsResponseSchema,
 } from './calls/list-trips.js';
 import {
@@ -94,27 +95,14 @@ export class AbaxClient {
     return this.performRequest(apiKey => call({ input, apiKey }));
   }
 
-  /** Gets paged list of Trips. Required scopes: `abax_profile`, `open_api`, `open_api.trips`.  */
-  listTrips(input: ListTripsInput): Promise<ListTripsResponse> {
-    const call = this.authenticatedCall()
-      .args<{ input: ListTripsInput }>()
-      .method('get')
-      .path('v1/trips')
-      .query(({ input }) =>
-        makeQuery({
-          query: {
-            page: input.query.page,
-            page_size: input.query.page_size,
-            date_from: format(input.query.date_from, 'yyyy-MM-dd'),
-            date_to: format(input.query.date_to, 'yyyy-MM-dd'),
-            vehicle_id: input.query.vehicle_id,
-          },
-        }),
-      )
-      .parseJson(withZod(listTripsResponseSchema))
-      .build();
+  async listTrips(input: ListTripsInput): Promise<ListTripsResponse> {
+    if (input.query.page_size === 0) {
+      const trips = await this.listNextPagesOfTrips(input, 1);
 
-    return this.performRequest(apiKey => call({ input, apiKey }));
+      return { page: 1, page_size: 0, items: trips };
+    }
+
+    return this.listTripsPage(input);
   }
 
   listUsageSummary(
@@ -320,6 +308,48 @@ export class AbaxClient {
         return params;
       })
       .parseJson(withZod(listTripExpensesSchema))
+      .build();
+
+    return this.performRequest(apiKey => call({ input, apiKey }));
+  }
+
+  /** Recursively list all pages starting from the provided page number. Uses page size 1500 (maximum). */
+  private async listNextPagesOfTrips(
+    input: { query: Omit<ListTripsInput['query'], 'page' | 'page_size'> },
+    page: number,
+  ): Promise<Trip[]> {
+    const response = await this.listTripsPage({
+      query: { ...input.query, page_size: 1500, page },
+    });
+
+    if (response.items.length >= 1500) {
+      // There might be more trips, we need to fetch the next page
+      const nextPage = await this.listNextPagesOfTrips(input, page + 1);
+      return [...response.items, ...nextPage];
+    } else {
+      // There are less than 1500 trips, so this is the last page
+      return response.items;
+    }
+  }
+
+  /** Gets paged list of Trips. Required scopes: `abax_profile`, `open_api`, `open_api.trips`.  */
+  private listTripsPage(input: ListTripsInput): Promise<ListTripsResponse> {
+    const call = this.authenticatedCall()
+      .args<{ input: ListTripsInput }>()
+      .method('get')
+      .path('v1/trips')
+      .query(({ input }) =>
+        makeQuery({
+          query: {
+            page: input.query.page,
+            page_size: input.query.page_size,
+            date_from: format(input.query.date_from, 'yyyy-MM-dd'),
+            date_to: format(input.query.date_to, 'yyyy-MM-dd'),
+            vehicle_id: input.query.vehicle_id,
+          },
+        }),
+      )
+      .parseJson(withZod(listTripsResponseSchema))
       .build();
 
     return this.performRequest(apiKey => call({ input, apiKey }));

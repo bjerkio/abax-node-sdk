@@ -6,7 +6,7 @@ export type ListTripsInput = QueryEnvelope<{
   /** Defaults to 1 */
   page?: number;
 
-  /** Defaults to 1500 */
+  /** Defaults to 1500, if set to 0, all trips will be returned unpaginated */
   page_size?: number;
 
   /** The period cannot be longer than 3 months */
