@@ -114,8 +114,7 @@ export class AbaxClient {
       .args<{ input: GetUsageSummaryInput }>()
       .method('get')
       .path(
-        ({ input: { vehicleId } }) =>
-          `/v1/vehicles/${vehicleId}/usage-summary`,
+        ({ input: { vehicleId } }) => `/v1/vehicles/${vehicleId}/usage-summary`,
       )
       .query(({ input }) => {
         const queryParams = new URLSearchParams();
