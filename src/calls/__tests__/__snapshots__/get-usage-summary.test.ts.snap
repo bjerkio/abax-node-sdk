@@ -45,15 +45,15 @@ exports[`get-equipment > should return equipment 1`] = `
 
 exports[`get-usage-summary > should return equipment 1`] = `
 {
-  "corporate_usage_summary": {
-    "distance_driven_in_meters": 468,
-    "total_road_toll_cost": 80,
-    "total_toll_stations_passed": 4,
+  "corporateUsageSummary": {
+    "distanceDrivenInMeters": 468,
+    "totalRoadTollCost": 80,
+    "totalTollStationsPassed": 4,
   },
-  "private_usage_summary": {
-    "distance_driven_in_meters": 1500,
-    "total_road_toll_cost": 40,
-    "total_toll_stations_passed": 2,
+  "privateUsageSummary": {
+    "distanceDrivenInMeters": 1500,
+    "totalRoadTollCost": 40,
+    "totalTollStationsPassed": 2,
   },
 }
 `;

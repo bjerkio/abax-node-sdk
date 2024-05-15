@@ -67,7 +67,7 @@ describe('rate-limit-handling', () => {
     expect(vehicles).toEqual({
       items: [],
       page: 1,
-      page_size: 150,
+      pageSize: 150,
     });
   });
 });

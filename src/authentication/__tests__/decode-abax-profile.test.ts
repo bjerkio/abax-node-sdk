@@ -9,27 +9,29 @@ describe('decode-abax.profile.ts', () => {
     const decoded = decodeAbaxProfileToken(token);
 
     expect(decoded).toMatchObject({
-      iss: 'https://identity.abax.cloud',
+      iss: "https://identity.abax.cloud",
       nbf: 123,
       iat: 123,
       exp: 123,
-      aud: 'hello',
-      amr: ['hello'],
-      at_hash: '123abc',
-      sid: '123EF',
-      sub: '123',
-      auth_time: 123,
-      idp: 'local',
-      'http://schemas.abax.no/identity/claims/username': 'hello@example.com',
-      role: 'Administrator',
-      name: 'Name Namey',
-      locale: 'no',
-      'http://schemas.abax.no/identity/claims/organizationid': '123',
-      'http://schemas.abax.no/identity/claims/countrycode': 'NO',
-      email: 'hello@example.com',
-      email_verified: true,
-      phone_number: '+4799999999',
-      'http://schemas.abax.no/identity/claims/securitystamp': '123abc',
+      aud: "hello",
+      amr: [
+        "hello"
+      ],
+      sid: "123EF",
+      sub: "123",
+      idp: "local",
+      role: "Administrator",
+      name: "Name Namey",
+      locale: "no",
+      email: "hello@example.com",
+      username: "hello@example.com",
+      organizationId: "123",
+      countryCode: "NO",
+      securityStamp: "123abc",
+      atHash: "123abc",
+      authTime: 123,
+      emailVerified: true,
+      phoneNumber: "+4799999999"
     });
   });
   it('should fail to decode a bad token', () => {
