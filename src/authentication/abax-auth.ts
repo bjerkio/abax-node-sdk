@@ -218,7 +218,7 @@ export class AbaxAuth {
       return undefined;
     }
 
-    // check if token has passed minimum lifetime
+    // check if token will expire within the minimum lifetime
     if (
       this.credentials.expiresAt.getTime() - Date.now() <
       this.minimumTokenLifetime * 1000
