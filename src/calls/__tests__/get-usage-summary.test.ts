@@ -25,9 +25,9 @@ describe('get-usage-summary', () => {
       .times(1);
 
     const usageSummary = await client.listUsageSummary({
-      vehicle_id: '394f39098dee561fb248b443e327c790',
-      date_from: new Date('2024-01-01'),
-      date_to: new Date('2024-02-28'),
+      vehicleId: '394f39098dee561fb248b443e327c790',
+      dateFrom: new Date('2024-01-01'),
+      dateTo: new Date('2024-02-28'),
     });
 
     expect(usageSummary).toMatchSnapshot();

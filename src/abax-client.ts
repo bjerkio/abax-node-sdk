@@ -114,13 +114,13 @@ export class AbaxClient {
       .args<{ input: GetUsageSummaryInput }>()
       .method('get')
       .path(
-        ({ input: { vehicle_id } }) =>
-          `/v1/vehicles/${vehicle_id}/usage-summary`,
+        ({ input: { vehicleId } }) =>
+          `/v1/vehicles/${vehicleId}/usage-summary`,
       )
       .query(({ input }) => {
         const queryParams = new URLSearchParams();
-        queryParams.append('from', format(input.date_from, 'yyyy-MM-dd'));
-        queryParams.append('to', format(input.date_to, 'yyyy-MM-dd'));
+        queryParams.append('from', format(input.dateFrom, 'yyyy-MM-dd'));
+        queryParams.append('to', format(input.dateTo, 'yyyy-MM-dd'));
         return queryParams;
       })
       .parseJson(withZod(usageSummarySchema))
