@@ -67,7 +67,10 @@ export class AbaxAuth {
     if (config.baseUrl) {
       this.baseUrl = config.baseUrl;
     }
-    this.minimumTokenLifetime = config.minimumTokenLifetime ?? 60;
+    this.minimumTokenLifetime =
+      config.minimumTokenLifetime && config.minimumTokenLifetime > 0
+        ? config.minimumTokenLifetime
+        : 60;
   }
 
   /**
