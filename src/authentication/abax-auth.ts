@@ -222,14 +222,6 @@ export class AbaxAuth {
       await this.refreshCredentials();
     }
 
-    // check if token is expired
-    if (
-      this.credentials.refreshToken &&
-      this.credentials.expiresAt.getTime() < Date.now()
-    ) {
-      await this.refreshCredentials();
-    }
-
     return this.credentials.accessToken;
   }
 }
