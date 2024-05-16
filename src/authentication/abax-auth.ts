@@ -52,8 +52,8 @@ export interface AbaxAuthConfig {
    */
   baseUrl?: string | undefined;
   /**
-   * The minimum lifetime of the token in seconds. If the token expires in less
-   * than this time, it will be refreshed.
+   * The minimum required lifetime of an access token in seconds. When getting an access token, the token will be 
+   * refreshed accordingly to ensure the access token returned satisfies this requirement.
    */
   minimumTokenLifetime?: number | undefined;
 }
