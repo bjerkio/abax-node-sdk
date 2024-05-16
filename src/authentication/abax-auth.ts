@@ -51,16 +51,26 @@ export interface AbaxAuthConfig {
    * @default https://identity.abax.cloud
    */
   baseUrl?: string | undefined;
+  /**
+   * The minimum required lifetime of an access token in seconds. When getting an access token, the token will be
+   * refreshed accordingly to ensure the access token returned satisfies this requirement.
+   */
+  minimumTokenLifetime?: number | undefined;
 }
 
 export class AbaxAuth {
   private baseUrl = 'https://identity.abax.cloud';
   private credentials?: AbaxCredentials;
+  private minimumTokenLifetime: number;
 
   constructor(private readonly config: AbaxAuthConfig) {
     if (config.baseUrl) {
       this.baseUrl = config.baseUrl;
     }
+    this.minimumTokenLifetime =
+      config.minimumTokenLifetime && config.minimumTokenLifetime > 0
+        ? config.minimumTokenLifetime
+        : 60;
   }
 
   /**
@@ -207,10 +217,10 @@ export class AbaxAuth {
       return undefined;
     }
 
-    // check if token is expired
+    // check if token will expire within the minimum lifetime
     if (
-      this.credentials.refreshToken &&
-      this.credentials.expiresAt.getTime() < Date.now()
+      this.credentials.expiresAt.getTime() - Date.now() <
+      this.minimumTokenLifetime * 1000
     ) {
       await this.refreshCredentials();
     }
