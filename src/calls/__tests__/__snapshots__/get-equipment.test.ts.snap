@@ -3,32 +3,34 @@
 exports[`get-equipment > should return equipment 1`] = `
 {
   "alias": "Concrete Pump Yellow",
-  "asset_id": "947a0543bb4446dc98e17069f659be7c",
+  "assetId": "947a0543bb4446dc98e17069f659be7c",
   "id": "90c5b884d50b46afa6eb3aa14792f782",
-  "initial_operating_hours": {
+  "initialOperatingHours": {
     "hours": 5,
-    "unit_driven": true,
+    "unitDriven": true,
   },
   "location": {
-    "in_movement": false,
+    "accuracyRadius": undefined,
+    "inMovement": false,
     "latitude": 67.879802,
     "longitude": 12.977594,
-    "signal_source": "Gps",
+    "signalSource": "Gps",
     "timestamp": "2019-09-27T08:59:41.821+00:00",
   },
   "model": {
     "name": "Reed Concrete Pump C50-HP",
   },
   "notes": "To be used only in Oslo",
-  "operating_hours": {
+  "operatingHours": {
     "hours": 100,
-    "unit_driven": true,
+    "unitDriven": true,
   },
   "organization": {
     "id": "9953da6a1ce7404591680b20fc67a1b1",
     "name": "ABAX",
   },
-  "serial_number": "UHR000123",
+  "registeredAt": undefined,
+  "serialNumber": "UHR000123",
   "temperature": {
     "timestamp": "2019-09-27T08:59:41.821+00:00",
     "value": 20,
@@ -36,7 +38,7 @@ exports[`get-equipment > should return equipment 1`] = `
   "unit": {
     "health": "Healthy",
     "id": "3ba46063c2064276becc484d3dc432fc",
-    "serial_number": "PCX000123",
+    "serialNumber": "PCX000123",
     "status": "Active",
     "type": "Abax5",
   },
