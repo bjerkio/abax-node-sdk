@@ -119,12 +119,12 @@ export class AbaxClient {
       .path(
         ({ input: { vehicleId } }) => `/v1/vehicles/${vehicleId}/usage-summary`,
       )
-      .query(({ input }) => {
-        const queryParams = new URLSearchParams();
-        queryParams.append('from', format(input.dateFrom, 'yyyy-MM-dd'));
-        queryParams.append('to', format(input.dateTo, 'yyyy-MM-dd'));
-        return queryParams;
-      })
+      .query(({ input }) =>
+        makeSearchParams({
+          from: input.dateFrom,
+          to: input.dateTo,
+        }),
+      )
       .parseJson(withZod(usageSummarySchema))
       .build();
 
@@ -353,8 +353,8 @@ export class AbaxClient {
         makeSearchParams({
           page: input.page,
           page_size: input.pageSize,
-          date_from: format(input.dateFrom, 'yyyy-MM-dd'),
-          date_to: format(input.dateTo, 'yyyy-MM-dd'),
+          date_from: input.dateFrom,
+          date_to: input.dateTo,
           vehicle_id: input.vehicleId,
         }),
       )
