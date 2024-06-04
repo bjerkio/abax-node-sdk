@@ -44,8 +44,6 @@ export function makeSearchParams(
         Object.values(value).forEach(v => {
           params.append(key, makeStringFromSeachParam(v));
         });
-      } else if (value instanceof Date) {
-        params.append(key, makeStringFromSeachParam(value));
       } else {
         params.append(key, makeStringFromSeachParam(value));
       }
