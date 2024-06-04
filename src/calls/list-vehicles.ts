@@ -1,12 +1,12 @@
 import { z } from 'zod';
 import { driverSchema, vehicleCommercialClassSchema } from './shared.js';
 
-export type ListVehiclesInput = {
+export type ListVehiclesInput =
+  | {
       page: number;
       pageSize: number;
     }
-  | undefined
-;
+  | undefined;
 
 const manufacturerSchema = z.object({ name: z.string() });
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { driverSchema, vehicleCommercialClassSchema } from './shared.js';
 
-export type ListTripsInput = {
+export interface ListTripsInput {
   /** Defaults to 1 */
   page?: number;
 
@@ -15,7 +15,7 @@ export type ListTripsInput = {
   dateTo: Date;
 
   vehicleId?: string;
-};
+}
 
 const locationPointSchema = z
   .object({

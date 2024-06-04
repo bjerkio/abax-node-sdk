@@ -81,9 +81,7 @@ export class AbaxClient {
   constructor(private readonly config: AbaxClientConfig) {}
 
   /** Gets paged list of Vehicles. Required scopes: `abax_profile`, `open_api`, `open_api.vehicles`.  */
-  listVehicles(
-    input?: ListVehiclesInput 
-  ): Promise<ListVehiclesResponse> {
+  listVehicles(input?: ListVehiclesInput): Promise<ListVehiclesResponse> {
     const call = this.authenticatedCall()
       .args<{ input: ListVehiclesInput }>()
       .method('get')
@@ -157,7 +155,7 @@ export class AbaxClient {
 
     for (const batch of tripIdBatches) {
       const response = await this.list150TripExpenses({
-         tripIds: batch ,
+        tripIds: batch,
       });
 
       expenses.push(response.items);
@@ -193,7 +191,7 @@ export class AbaxClient {
 
     for (const batch of tripIdBatches) {
       const response = await this.getOdometerValuesOf150Trips({
-         tripIds: batch ,
+        tripIds: batch,
       });
 
       odometerValues.push(response.items);
@@ -322,15 +320,17 @@ export class AbaxClient {
 
   /** Recursively list all pages starting from the provided page number. Uses page size 1500 (maximum). */
   private async listNextPagesOfTrips(
-    input: { 
-      dateFrom: Date,
-      dateTo: Date,
-      vehicleId?: string,
+    input: {
+      dateFrom: Date;
+      dateTo: Date;
+      vehicleId?: string;
     },
     page: number,
   ): Promise<Trip[]> {
     const response = await this.listTripsPage({
-       ...input, pageSize: 1500, page ,
+      ...input,
+      pageSize: 1500,
+      page,
     });
 
     if (response.items.length >= 1500) {
@@ -378,17 +378,11 @@ export class AbaxClient {
       .args<{ input: GetOdometerValuesOfTripsInput }>()
       .method('get')
       .path('v1/trips/odometerReadings')
-      .query(
-        ({
-          input: {
-             tripIds ,
-          },
-        }) => {
-          const params = new URLSearchParams();
-          tripIds.forEach(trip => params.append('trip_ids', trip));
-          return params;
-        },
-      )
+      .query(({ input: { tripIds } }) => {
+        const params = new URLSearchParams();
+        tripIds.forEach(trip => params.append('trip_ids', trip));
+        return params;
+      })
       .parseJson(withZod(getOdometerValuesOfTripsResponseSchema))
       .build();
 

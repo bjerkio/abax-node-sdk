@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-export type GetOdometerValuesOfTripsInput = {
+export interface GetOdometerValuesOfTripsInput {
   /** Ids of trips. */
   tripIds: string[];
-};
+}
 
 const odometerReadingSchema = z.object({
   value: z.number(),

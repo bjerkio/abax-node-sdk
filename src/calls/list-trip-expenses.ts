@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export type ListTripExpensesInput = {
+export interface ListTripExpensesInput {
   /** Ids of trips. Can have up to 150 ids */
   tripIds: string[];
 }
