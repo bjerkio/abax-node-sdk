@@ -1,4 +1,4 @@
-import { addMinutes, set } from 'date-fns';
+import { addMinutes, format, set } from 'date-fns';
 import type { z } from 'zod';
 
 export function startOfTheNextMinute(fromDate?: Date): Date {
@@ -43,7 +43,7 @@ export function makeSearchParams(
 
 function makeStringFromSeachParam(value: unknown): string {
   if (value instanceof Date) {
-    return value.toISOString();
+    return format(value, 'yyyy-MM-dd');
   }
 
   return String(value);
