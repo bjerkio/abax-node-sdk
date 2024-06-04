@@ -1,4 +1,4 @@
-import { format, isAfter } from 'date-fns';
+import { isAfter } from 'date-fns';
 import { invariant } from 'ts-invariant';
 import { type CallReturn, TypicalHttpError, buildCall } from 'typical-fetch';
 import {
@@ -121,12 +121,12 @@ export class AbaxClient {
       .path(
         ({ input: { vehicleId } }) => `/v1/vehicles/${vehicleId}/usage-summary`,
       )
-      .query(({ input }) => {
-        const queryParams = new URLSearchParams();
-        queryParams.append('from', format(input.dateFrom, 'yyyy-MM-dd'));
-        queryParams.append('to', format(input.dateTo, 'yyyy-MM-dd'));
-        return queryParams;
-      })
+      .query(({ input }) => 
+        makeSearchParams({
+          from: input.dateFrom,
+          to: input.dateTo,
+        }),
+      )
       .parseJson(withZod(usageSummarySchema))
       .build();
 
@@ -256,28 +256,14 @@ export class AbaxClient {
       .args<{ input: ListEquipmentLogsInput }>()
       .method('get')
       .path('/v2/equipment/usage-log')
-      .query(({ input: { page, pageSize, dateFrom, dateTo } }) => {
-        const queryParams = new URLSearchParams();
-
-        queryParams.append(
-          'date_from',
-          format(dateFrom, "yyyy-MM-dd'T'HH:mm:ssxxx"),
-        );
-
-        queryParams.append(
-          'date_to',
-          format(dateTo, "yyyy-MM-dd'T'HH:mm:ssxxx"),
-        );
-
-        if (page) {
-          queryParams.append('page', String(page));
-        }
-        if (pageSize) {
-          queryParams.append('page_size', String(pageSize));
-        }
-
-        return queryParams;
-      })
+      .query(({ input: { page, pageSize, dateFrom, dateTo } }) => 
+        makeSearchParams({
+          page,
+          pageSize,
+          dateFrom,
+          dateTo,
+        })
+      )
       .parseJson(withZod(listEquipmentLogsResponseSchema))
       .build();
 
@@ -349,8 +335,8 @@ export class AbaxClient {
         makeSearchParams({
           page: input.query.page,
           page_size: input.query.pageSize,
-          date_from: format(input.query.dateFrom, 'yyyy-MM-dd'),
-          date_to: format(input.query.dateTo, 'yyyy-MM-dd'),
+          date_from: input.query.dateFrom,
+          date_to: input.query.dateTo,
           vehicle_id: input.query.vehicleId,
         }),
       )
