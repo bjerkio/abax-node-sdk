@@ -1,17 +1,5 @@
-import { addMinutes, format, set } from 'date-fns';
+import { addMinutes, set } from 'date-fns';
 import type { z } from 'zod';
-
-export function formatDate(date: Date): string {
-  return format(date, 'yyyy-MM-dd');
-}
-
-/**
- * @param date ISO 8601 date string
- * @returns formatted matching Abax API date format
- */
-export function formatDateTime(date: Date): string {
-  return date.toISOString();
-}
 
 export function startOfTheNextMinute(fromDate?: Date): Date {
   const now = fromDate ?? new Date();
@@ -55,7 +43,7 @@ export function makeSearchParams(
 
 function makeStringFromSeachParam(value: unknown): string {
   if (value instanceof Date) {
-    return formatDateTime(value);
+    return value.toISOString();
   }
 
   return String(value);
