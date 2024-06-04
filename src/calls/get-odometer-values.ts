@@ -1,10 +1,9 @@
 import { z } from 'zod';
-import type { QueryEnvelope } from '../common/types.js';
 
-export type GetOdometerValuesOfTripsInput = QueryEnvelope<{
+export type GetOdometerValuesOfTripsInput = {
   /** Ids of trips. */
   tripIds: string[];
-}>;
+};
 
 const odometerReadingSchema = z.object({
   value: z.number(),

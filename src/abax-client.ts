@@ -82,7 +82,7 @@ export class AbaxClient {
 
   /** Gets paged list of Vehicles. Required scopes: `abax_profile`, `open_api`, `open_api.vehicles`.  */
   listVehicles(
-    input: ListVehiclesInput = { query: undefined },
+    input?: ListVehiclesInput 
   ): Promise<ListVehiclesResponse> {
     const call = this.authenticatedCall()
       .args<{ input: ListVehiclesInput }>()
@@ -90,8 +90,8 @@ export class AbaxClient {
       .path('v1/vehicles')
       .query(({ input }) =>
         makeSearchParams({
-          page: input.query?.page,
-          page_size: input.query?.pageSize,
+          page: input?.page,
+          page_size: input?.pageSize,
         }),
       )
       .parseJson(withZod(listVehiclesResponseSchema))
@@ -102,7 +102,7 @@ export class AbaxClient {
 
   /** Gets paged list of Trips. Required scopes: `abax_profile`, `open_api`, `open_api.trips`.  */
   async listTrips(input: ListTripsInput): Promise<ListTripsResponse> {
-    if (input.query.pageSize === 0) {
+    if (input.pageSize === 0) {
       const trips = await this.listNextPagesOfTrips(input, 1);
 
       return { page: 1, pageSize: 0, items: trips };
@@ -136,7 +136,7 @@ export class AbaxClient {
   async listTripExpenses(
     input: ListTripExpensesInput,
   ): Promise<listTripExpensesResponse> {
-    const tripIdBatches = input.query.tripIds.reduce<string[][]>(
+    const tripIdBatches = input.tripIds.reduce<string[][]>(
       (batches, tripId) => {
         const currentBatchIndex = batches.length - 1;
 
@@ -157,7 +157,7 @@ export class AbaxClient {
 
     for (const batch of tripIdBatches) {
       const response = await this.list150TripExpenses({
-        query: { tripIds: batch },
+         tripIds: batch ,
       });
 
       expenses.push(response.items);
@@ -172,7 +172,7 @@ export class AbaxClient {
   async getOdometerValuesOfTrips(
     input: GetOdometerValuesOfTripsInput,
   ): Promise<GetOdometerValuesOfTripsResponse> {
-    const tripIdBatches = input.query.tripIds.reduce<string[][]>(
+    const tripIdBatches = input.tripIds.reduce<string[][]>(
       (batches, tripId) => {
         const currentBatchIndex = batches.length - 1;
 
@@ -193,7 +193,7 @@ export class AbaxClient {
 
     for (const batch of tripIdBatches) {
       const response = await this.getOdometerValuesOf150Trips({
-        query: { tripIds: batch },
+         tripIds: batch ,
       });
 
       odometerValues.push(response.items);
@@ -297,11 +297,11 @@ export class AbaxClient {
   private list150TripExpenses(
     input: ListTripExpensesInput,
   ): Promise<listTripExpensesResponse> {
-    if (input.query.tripIds.length === 0) {
+    if (input.tripIds.length === 0) {
       return Promise.resolve({ items: [] });
     }
 
-    if (input.query.tripIds.length > 150) {
+    if (input.tripIds.length > 150) {
       return this.listTripExpenses(input);
     }
 
@@ -311,7 +311,7 @@ export class AbaxClient {
       .path('v1/trips/expense')
       .query(({ input }) => {
         const params = new URLSearchParams();
-        input.query.tripIds.forEach(id => params.append('trip_ids', id));
+        input.tripIds.forEach(id => params.append('trip_ids', id));
         return params;
       })
       .parseJson(withZod(listTripExpensesSchema))
@@ -322,11 +322,15 @@ export class AbaxClient {
 
   /** Recursively list all pages starting from the provided page number. Uses page size 1500 (maximum). */
   private async listNextPagesOfTrips(
-    input: { query: Omit<ListTripsInput['query'], 'page' | 'page_size'> },
+    input: { 
+      dateFrom: Date,
+      dateTo: Date,
+      vehicleId?: string,
+    },
     page: number,
   ): Promise<Trip[]> {
     const response = await this.listTripsPage({
-      query: { ...input.query, pageSize: 1500, page },
+       ...input, pageSize: 1500, page ,
     });
 
     if (response.items.length >= 1500) {
@@ -347,11 +351,11 @@ export class AbaxClient {
       .path('v1/trips')
       .query(({ input }) =>
         makeSearchParams({
-          page: input.query.page,
-          page_size: input.query.pageSize,
-          date_from: format(input.query.dateFrom, 'yyyy-MM-dd'),
-          date_to: format(input.query.dateTo, 'yyyy-MM-dd'),
-          vehicle_id: input.query.vehicleId,
+          page: input.page,
+          page_size: input.pageSize,
+          date_from: format(input.dateFrom, 'yyyy-MM-dd'),
+          date_to: format(input.dateTo, 'yyyy-MM-dd'),
+          vehicle_id: input.vehicleId,
         }),
       )
       .parseJson(withZod(listTripsResponseSchema))
@@ -363,10 +367,10 @@ export class AbaxClient {
   private async getOdometerValuesOf150Trips(
     input: GetOdometerValuesOfTripsInput,
   ): Promise<GetOdometerValuesOfTripsResponse> {
-    if (input.query.tripIds.length === 0) {
+    if (input.tripIds.length === 0) {
       return Promise.resolve({ items: [] });
     }
-    if (input.query.tripIds.length > 150) {
+    if (input.tripIds.length > 150) {
       return this.getOdometerValuesOfTrips(input);
     }
 
@@ -377,7 +381,7 @@ export class AbaxClient {
       .query(
         ({
           input: {
-            query: { tripIds },
+             tripIds ,
           },
         }) => {
           const params = new URLSearchParams();

@@ -1,14 +1,12 @@
 import { z } from 'zod';
-import type { QueryEnvelope } from '../common/types.js';
 import { driverSchema, vehicleCommercialClassSchema } from './shared.js';
 
-export type ListVehiclesInput = QueryEnvelope<
-  | {
+export type ListVehiclesInput = {
       page: number;
       pageSize: number;
     }
   | undefined
->;
+;
 
 const manufacturerSchema = z.object({ name: z.string() });
 

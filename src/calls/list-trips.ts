@@ -1,8 +1,7 @@
 import { z } from 'zod';
-import type { QueryEnvelope } from '../common/types.js';
 import { driverSchema, vehicleCommercialClassSchema } from './shared.js';
 
-export type ListTripsInput = QueryEnvelope<{
+export type ListTripsInput = {
   /** Defaults to 1 */
   page?: number;
 
@@ -16,7 +15,7 @@ export type ListTripsInput = QueryEnvelope<{
   dateTo: Date;
 
   vehicleId?: string;
-}>;
+};
 
 const locationPointSchema = z
   .object({
