@@ -33,14 +33,22 @@ export function startOfTheNextMinute(fromDate?: Date): Date {
  *
  * Create search parameters from a flat object.
  */
+/** Creates search params from a one-dimensional object. Supports array values. */
 export function makeSearchParams(
   data: Record<string, unknown>,
 ): URLSearchParams {
   const params = new URLSearchParams();
-
   Object.entries(data).forEach(([key, value]) => {
     if (value) {
-      params.append(key, String(value));
+      if (Object.prototype.toString.call(value) === '[object Array]') {
+        Object.values(value).forEach(v => {
+          params.append(key, makeStringFromSeachParam(v));
+        });
+      } else if (value instanceof Date) {
+        params.append(key, makeStringFromSeachParam(value));
+      } else {
+        params.append(key, makeStringFromSeachParam(value));
+      }
     }
   });
 
