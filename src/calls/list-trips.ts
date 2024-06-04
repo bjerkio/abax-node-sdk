@@ -5,7 +5,12 @@ export interface ListTripsInput {
   /** Defaults to 1 */
   page?: number;
 
-  /** Defaults to 1500 */
+  /** 
+   * Defaults to 1500 
+   * 
+   * If page size is set to 0, the function will fetch trips 
+   * sequentially and return them all in a depaginated list.
+   * */
   pageSize?: number;
 
   /** The period cannot be longer than 3 months */
