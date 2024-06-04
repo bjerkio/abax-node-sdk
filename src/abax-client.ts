@@ -320,11 +320,7 @@ export class AbaxClient {
 
   /** Recursively list all pages starting from the provided page number. Uses page size 1500 (maximum). */
   private async listNextPagesOfTrips(
-    input: {
-      dateFrom: Date;
-      dateTo: Date;
-      vehicleId?: string;
-    },
+    input: Omit<ListTripsInput, 'pageSize' | 'page'>,
     page: number,
   ): Promise<Trip[]> {
     const response = await this.listTripsPage({
