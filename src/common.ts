@@ -43,7 +43,7 @@ export function makeSearchParams(
 
 function makeStringFromSeachParam(value: unknown): string {
   if (value instanceof Date) {
-    return format(value, 'yyyy-MM-dd');
+    return format(value, "yyyy-MM-dd'T'HH:mm:ssxxx");
   }
 
   return String(value);
