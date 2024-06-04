@@ -1,13 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { initialiseClientAndMockPool } from '../../test-utils';
+import { makeSearchParams } from '../../common';
 
 describe('get-usage-summary', () => {
   it('should return equipment', async () => {
     const { client, mockPool } = initialiseClientAndMockPool();
 
+    const searchParams = makeSearchParams({
+      from: new Date('2024-01-01'),
+      to: new Date('2024-02-28'),
+    })
+    const path = `/v1/vehicles/394f39098dee561fb248b443e327c790/usage-summary?${searchParams.toString()}`;
     mockPool
       .intercept({
-        path: '/v1/vehicles/394f39098dee561fb248b443e327c790/usage-summary?from=2024-01-01&to=2024-02-28',
+        path: path,
         method: 'GET',
       })
       .reply(200, {
@@ -23,7 +29,7 @@ describe('get-usage-summary', () => {
         },
       })
       .times(1);
-
+    
     const usageSummary = await client.listUsageSummary({
       vehicleId: '394f39098dee561fb248b443e327c790',
       dateFrom: new Date('2024-01-01'),
