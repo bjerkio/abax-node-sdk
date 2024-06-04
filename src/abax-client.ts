@@ -121,7 +121,7 @@ export class AbaxClient {
       .path(
         ({ input: { vehicleId } }) => `/v1/vehicles/${vehicleId}/usage-summary`,
       )
-      .query(({ input }) => 
+      .query(({ input }) =>
         makeSearchParams({
           from: input.dateFrom,
           to: input.dateTo,
@@ -256,13 +256,13 @@ export class AbaxClient {
       .args<{ input: ListEquipmentLogsInput }>()
       .method('get')
       .path('/v2/equipment/usage-log')
-      .query(({ input: { page, pageSize, dateFrom, dateTo } }) => 
+      .query(({ input: { page, pageSize, dateFrom, dateTo } }) =>
         makeSearchParams({
           page,
           pageSize,
           dateFrom,
           dateTo,
-        })
+        }),
       )
       .parseJson(withZod(listEquipmentLogsResponseSchema))
       .build();
