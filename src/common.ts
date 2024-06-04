@@ -55,6 +55,14 @@ export function makeSearchParams(
   return params;
 }
 
+function makeStringFromSeachParam(value: unknown): string {
+  if (value instanceof Date) {
+    return formatDateTime(value);
+  }
+
+  return String(value);
+}
+
 export function withZod<T extends z.ZodTypeAny, Output = z.infer<T>>(
   schema: T,
 ): (data: unknown) => Output {
