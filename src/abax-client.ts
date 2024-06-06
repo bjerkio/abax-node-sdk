@@ -259,9 +259,9 @@ export class AbaxClient {
       .query(({ input: { page, pageSize, dateFrom, dateTo } }) =>
         makeSearchParams({
           page,
-          pageSize,
-          dateFrom,
-          dateTo,
+          page_size: pageSize,
+          page_to: dateFrom,
+          date_to: dateTo,
         }),
       )
       .parseJson(withZod(listEquipmentLogsResponseSchema))
