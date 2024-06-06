@@ -456,6 +456,12 @@ export class AbaxClient {
         }
         throw new Error('Request was rejected');
       }
+      if (error instanceof TypicalHttpError && error.status === 403) {
+        if(error.message) {
+          throw new Error(`Request was forbidden: ${error.message}`);
+        }
+        throw new Error('Request forbidden');
+      }
     }
 
     throw new Error('Not able to perform request');
