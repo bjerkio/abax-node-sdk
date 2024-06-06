@@ -444,6 +444,18 @@ export class AbaxClient {
           );
         }
       }
+      if (error instanceof TypicalHttpError && error.status === 401) {
+        if(error.message) {
+          throw new Error(`Request was unauthorized: ${error.message}`);
+        }
+        throw new Error('Request was unauthorized');
+      }
+      if (error instanceof TypicalHttpError && error.status === 400) {
+        if(error.message) {
+          throw new Error(`Request was rejected: ${error.message}`);
+        }
+        throw new Error('Request was rejected');
+      }
     }
 
     throw new Error('Not able to perform request');
