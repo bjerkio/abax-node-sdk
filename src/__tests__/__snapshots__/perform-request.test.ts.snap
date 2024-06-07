@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`perform request > Should handle 400 error without message 1`] = `[Error: Request was rejected: {}]`;
+
+exports[`perform request > Should handle 401 error without message 1`] = `[Error: Request was unauthorized: {}]`;
+
+exports[`perform request > Should handle 403 error without message 1`] = `[Error: Request was forbidden: {}]`;
+
+exports[`perform request > Should handle 404 error without message 1`] = `[Error: Not able to perform request]`;
+
+exports[`perform request > Should throw not found error on 404 with message 1`] = `[Error: Not able to perform request]`;
+
+exports[`perform request > Should throw rejected error on 403 1`] = `[Error: Request was forbidden: {"error":"Forbidden","message":"Access denied"}]`;
+
+exports[`perform request > Should throw unauthorized error on 401 1`] = `[Error: Request was unauthorized: {"error":"Unauthorized","message":"Invalid token"}]`;
+
+exports[`perform request > should pass through error message on 400 1`] = `[Error: Request was rejected: {"error":"Bad Request","message":"Equipment id is invalid"}]`;
