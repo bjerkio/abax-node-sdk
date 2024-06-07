@@ -430,19 +430,19 @@ export class AbaxClient {
         }
       }
       if (error instanceof TypicalHttpError && error.status === 401) {
-        if(error.message) {
+        if (error.message) {
           throw new Error(`Request was unauthorized: ${error.message}`);
         }
         throw new Error('Request was unauthorized');
       }
       if (error instanceof TypicalHttpError && error.status === 400) {
-        if(error.message) {
+        if (error.message) {
           throw new Error(`Request was rejected: ${error.message}`);
         }
         throw new Error('Request was rejected');
       }
       if (error instanceof TypicalHttpError && error.status === 403) {
-        if(error.message) {
+        if (error.message) {
           throw new Error(`Request was forbidden: ${error.message}`);
         }
         throw new Error('Request forbidden');
