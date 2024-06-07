@@ -1,10 +1,14 @@
 import { z } from 'zod';
-import type { QueryEnvelope } from '../common/types.js';
 
-export type GetOdometerValuesOfTripsInput = QueryEnvelope<{
-  /** Ids of trips. */
+export interface GetOdometerValuesOfTripsInput {
+  /**
+   * Ids of trips.
+   *
+   * If more than 150 ids are provided, multiple queries will be made in sequence
+   * containing up to 150 ids each.
+   * */
   tripIds: string[];
-}>;
+}
 
 const odometerReadingSchema = z.object({
   value: z.number(),

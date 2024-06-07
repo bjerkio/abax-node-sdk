@@ -42,13 +42,11 @@ describe('get odometer values', () => {
       .times(1);
 
     const odometerValues = await client.getOdometerValuesOfTrips({
-      query: {
-        tripIds: [
-          '871c120e54cb4c58b4fb5ee457bb968a',
-          '0e2d0a84463e411dbedab16560b60430',
-          '129769b3470354568ae6995e7b3c70f5',
-        ],
-      },
+      tripIds: [
+        '871c120e54cb4c58b4fb5ee457bb968a',
+        '0e2d0a84463e411dbedab16560b60430',
+        '129769b3470354568ae6995e7b3c70f5',
+      ],
     });
     expect(odometerValues).toMatchSnapshot();
   });

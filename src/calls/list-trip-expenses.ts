@@ -1,10 +1,13 @@
 import { z } from 'zod';
-import type { QueryEnvelope } from '../common/types.js';
 
-export type ListTripExpensesInput = QueryEnvelope<{
-  /** Ids of trips. Can have up to 150 ids */
+export interface ListTripExpensesInput {
+  /** Ids of trips.
+   *
+   * If more than 150 ids are provided, multiple queries will be made in sequence
+   * containing up to 150 ids each.
+   * */
   tripIds: string[];
-}>;
+}
 
 const expenseSchema = z
   .object({

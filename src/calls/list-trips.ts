@@ -1,12 +1,16 @@
 import { z } from 'zod';
-import type { QueryEnvelope } from '../common/types.js';
 import { driverSchema, vehicleCommercialClassSchema } from './shared.js';
 
-export type ListTripsInput = QueryEnvelope<{
+export interface ListTripsInput {
   /** Defaults to 1 */
   page?: number;
 
-  /** Defaults to 1500 */
+  /**
+   * Defaults to 1500
+   *
+   * If page size is set to 0, the function will fetch trips
+   * sequentially and return them all in a depaginated list.
+   * */
   pageSize?: number;
 
   /** The period cannot be longer than 3 months */
@@ -16,7 +20,7 @@ export type ListTripsInput = QueryEnvelope<{
   dateTo: Date;
 
   vehicleId?: string;
-}>;
+}
 
 const locationPointSchema = z
   .object({
