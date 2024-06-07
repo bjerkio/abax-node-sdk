@@ -1,6 +1,6 @@
 import { buildCall } from 'typical-fetch';
 import { z } from 'zod';
-import { withZod } from '../common/utils.js';
+import { withZod } from '../common.js';
 
 export interface GetTokenInput {
   code?: string;
@@ -33,7 +33,7 @@ export const getTokenCall = buildCall()
     'Content-Type': 'application/x-www-form-urlencoded',
   })
   .method('post')
-  .body(({ input }) => {
+  .body(({ input }: { input: GetTokenInput }) => {
     const body = new URLSearchParams();
 
     const grantType = input.code ? 'authorization_code' : 'client_credentials';
@@ -66,7 +66,7 @@ export const refreshCall = buildCall()
     'Content-Type': 'application/x-www-form-urlencoded',
   })
   .method('post')
-  .body(({ input }) => {
+  .body(({ input }: { input: RefreshAccessTokenInput }) => {
     const body = new URLSearchParams();
 
     body.append('grant_type', 'refresh_token');
