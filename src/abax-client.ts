@@ -410,6 +410,10 @@ export class AbaxClient {
       }
 
       const { error } = res;
+      let responseBody = '';
+      if (error instanceof TypicalHttpError) {
+        responseBody = await error.res.text();
+      }
 
       if (error instanceof TypicalHttpError && error.status === 429) {
         if (n >= 3) {
@@ -430,20 +434,20 @@ export class AbaxClient {
         }
       }
       if (error instanceof TypicalHttpError && error.status === 401) {
-        if (error.message) {
-          throw new Error(`Request was unauthorized: ${error.message}`);
+        if (responseBody) {
+          throw new Error(`Request was unauthorized: ${responseBody}`);
         }
         throw new Error('Request was unauthorized');
       }
       if (error instanceof TypicalHttpError && error.status === 400) {
-        if (error.message) {
-          throw new Error(`Request was rejected: ${error.message}`);
+        if (responseBody) {
+          throw new Error(`Request was rejected: ${responseBody}`);
         }
         throw new Error('Request was rejected');
       }
       if (error instanceof TypicalHttpError && error.status === 403) {
-        if (error.message) {
-          throw new Error(`Request was forbidden: ${error.message}`);
+        if (responseBody) {
+          throw new Error(`Request was forbidden: ${responseBody}`);
         }
         throw new Error('Request forbidden');
       }
