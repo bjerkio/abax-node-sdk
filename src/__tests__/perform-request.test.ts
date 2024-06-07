@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { initialiseClientAndMockPool } from '../test-utils';
 
 describe('perform request', () => {
-  it.skip('Should back off and retry on 429', () => {
+  it.skip('Should back off and retry on 429', async () => {
     const { client, mockPool } = initialiseClientAndMockPool();
 
     mockPool
@@ -13,14 +13,12 @@ describe('perform request', () => {
       .reply(429, {})
       .times(3);
 
-    const equipment = client.getEquipment({
-      id: '90c5b884d50b46afa6eb3aa14792f782',
-    });
-
-    expect(equipment).rejects.toMatchSnapshot();
+    await expect(
+      client.getEquipment({ id: '90c5b884d50b46afa6eb3aa14792f782' }),
+    ).rejects.toMatchSnapshot();
   });
 
-  it('Should throw rejected error on 403', () => {
+  it('Should throw rejected error on 403', async () => {
     const { client, mockPool } = initialiseClientAndMockPool();
 
     mockPool
@@ -34,14 +32,12 @@ describe('perform request', () => {
       })
       .times(1);
 
-    const equipment = client.getEquipment({
-      id: '90c5b884d50b46afa6eb3aa14792f782',
-    });
-
-    expect(equipment).rejects.toMatchSnapshot();
+    await expect(
+      client.getEquipment({ id: '90c5b884d50b46afa6eb3aa14792f782' }),
+    ).rejects.toMatchSnapshot();
   });
 
-  it('Should throw unauthorized error on 401', () => {
+  it('Should throw unauthorized error on 401', async () => {
     const { client, mockPool } = initialiseClientAndMockPool();
 
     mockPool
@@ -55,14 +51,12 @@ describe('perform request', () => {
       })
       .times(1);
 
-    const equipment = client.getEquipment({
-      id: '90c5b884d50b46afa6eb3aa14792f782',
-    });
-
-    expect(equipment).rejects.toMatchSnapshot();
+    await expect(
+      client.getEquipment({ id: '90c5b884d50b46afa6eb3aa14792f782' }),
+    ).rejects.toMatchSnapshot();
   });
 
-  it('Should throw not found error on 404 with message', () => {
+  it('Should throw not found error on 404 with message', async () => {
     const { client, mockPool } = initialiseClientAndMockPool();
 
     mockPool
@@ -76,14 +70,12 @@ describe('perform request', () => {
       })
       .times(1);
 
-    const equipment = client.getEquipment({
-      id: '90c5b884d50b46afa6eb3aa14792f782',
-    });
-
-    expect(equipment).rejects.toMatchSnapshot();
+    await expect(
+      client.getEquipment({ id: '90c5b884d50b46afa6eb3aa14792f782' }),
+    ).rejects.toMatchSnapshot();
   });
 
-  it('should pass through error message on 400', () => {
+  it('should pass through error message on 400', async () => {
     const { client, mockPool } = initialiseClientAndMockPool();
 
     mockPool
@@ -97,16 +89,14 @@ describe('perform request', () => {
       })
       .times(1);
 
-    const equipment = client.getEquipment({
-      id: '90c5b884d50b46afa6eb3aa14792f782',
-    });
-
-    expect(equipment).rejects.toMatchSnapshot();
+    await expect(
+      client.getEquipment({ id: '90c5b884d50b46afa6eb3aa14792f782' }),
+    ).rejects.toMatchSnapshot();
   });
 
   const errorCodes = [400, 401, 403, 404];
   errorCodes.forEach(errorCode => {
-    it(`Should handle ${errorCode} error without message`, () => {
+    it(`Should handle ${errorCode} error without message`, async () => {
       const { client, mockPool } = initialiseClientAndMockPool();
 
       mockPool
@@ -117,11 +107,9 @@ describe('perform request', () => {
         .reply(errorCode, {})
         .times(1);
 
-      const equipment = client.getEquipment({
-        id: '90c5b884d50b46afa6eb3aa14792f782',
-      });
-
-      expect(equipment).rejects.toMatchSnapshot();
+      await expect(
+        client.getEquipment({ id: '90c5b884d50b46afa6eb3aa14792f782' }),
+      ).rejects.toMatchSnapshot();
     });
   });
 });
