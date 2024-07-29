@@ -1,5 +1,5 @@
 import { type Interceptable, MockAgent, setGlobalDispatcher } from 'undici';
-import { AbaxClient } from './abax-client';
+import { AbaxClient } from './abax-client.js';
 
 export function initialiseClientAndMockPool(
   /** A unique base URL can be provided if there is a need to test against a different endpoint.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { startOfTheNextMinute } from '../utils';
+import { startOfTheNextMinute } from '../utils.js';
 
 describe('utils', () => {
   it('should get the start of the next minute correctly', () => {

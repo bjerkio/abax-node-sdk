@@ -1,6 +1,6 @@
 import { MockAgent, setGlobalDispatcher } from 'undici';
 import { describe, expect, it, vi } from 'vitest';
-import { AbaxAuth } from '../abax-auth';
+import { AbaxAuth } from '../abax-auth.js';
 
 const agent = new MockAgent();
 agent.disableNetConnect();
