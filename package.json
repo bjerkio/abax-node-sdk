@@ -34,7 +34,7 @@
     "@tsconfig/node-lts": "^18.12.2",
     "@tsconfig/strictest": "^2.0.1",
     "@types/node": "^18",
-    "eslint": "^8.45.0",
+    "eslint": "^9.0.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.3",
     "undici": "^5.28.2",
