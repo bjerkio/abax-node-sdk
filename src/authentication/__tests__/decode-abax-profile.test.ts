@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { decodeAbaxProfileToken } from '../decode-abax-profile';
+import { decodeAbaxProfileToken } from '../decode-abax-profile.js';
 
 describe('decode-abax.profile.ts', () => {
   it('should be able to decode a JWT id token correctly', () => {

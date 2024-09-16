@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { initialiseClientAndMockPool } from '../../test-utils';
+import { initialiseClientAndMockPool } from '../../test-utils.js';
 
 describe('list capabilities', () => {
   it('should list capabilitites', async () => {
