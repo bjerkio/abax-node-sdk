@@ -53,6 +53,6 @@
   "packageManager": "pnpm@8.15.9",
   "prettier": "@simenandre/prettier",
   "volta": {
-    "node": "18.17.0"
+    "node": "18.20.4"
   }
 }
